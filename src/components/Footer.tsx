@@ -34,7 +34,7 @@ const Footer = () => {
                 <Linkedin className="w-5 h-5 group-hover:text-accent transition-colors" />
               </a>
               <a 
-                href="mailto:yashas.dev@email.com" 
+                href="yashasgatty0@gmail.com" 
                 className="p-3 glass-card rounded-full hover:scale-110 transition-all duration-300 group"
               >
                 <Mail className="w-5 h-5 group-hover:text-accent transition-colors" />
@@ -65,9 +65,9 @@ const Footer = () => {
           <div className="text-center md:text-right">
             <h4 className="text-lg font-semibold mb-6">Let's Connect</h4>
             <div className="space-y-3 text-muted-foreground">
-              <p>📧 yashas.dev@email.com</p>
-              <p>📱 +91 98765 43210</p>
-              <p>📍 Karnataka, India</p>
+              <p>📧 yashasgatty0@gmail.com.com</p>
+              <p>📱 +91-6361334462</p>
+              <p>📍Mangalore ,Karnataka</p>
               <p className="text-sm mt-4">
                 Available for freelance projects and full-time opportunities
               </p>
@@ -81,7 +81,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span>© {currentYear} Yashas. Made with</span>
+            <span>© {currentYear} Yashas H Gatty Made with</span>
             <Heart className="w-4 h-4 text-red-500 animate-pulse" />
             <span>and lots of ☕</span>
           </div>

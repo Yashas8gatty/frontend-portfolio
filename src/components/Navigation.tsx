@@ -52,7 +52,7 @@ const Navigation = () => {
             onClick={() => scrollToSection('home')}
             className="text-xl font-bold gradient-text"
           >
-            Yashas
+            Yashas H Gatty
           </button>
           
           <div className="hidden md:flex items-center space-x-8">

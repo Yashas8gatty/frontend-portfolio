@@ -41,19 +41,19 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      value: 'yashas.dev@email.com',
-      link: 'mailto:yashas.dev@email.com'
+      value: 'yashasgatty0@gmail.com',
+      link: 'yashasgatty0@gmail.com'
     },
     {
       icon: Phone,
       title: 'Phone',
-      value: '+91 98765 43210',
-      link: 'tel:+919876543210'
+      value: '6361334462',
+      link: '+916361334462'
     },
     {
       icon: MapPin,
       title: 'Location',
-      value: 'Karnataka, India',
+      value: 'Mangaluru,Karnataka, India',
       link: '#'
     }
   ];
@@ -62,14 +62,14 @@ const Contact = () => {
     {
       icon: Github,
       name: 'GitHub',
-      link: 'https://github.com/yashas',
-      username: '@yashas'
+      link: 'https://github.com/yashas8gatty',
+      username: '@yashas8gatty'
     },
     {
       icon: Linkedin,
       name: 'LinkedIn',
-      link: 'https://linkedin.com/in/yashas',
-      username: 'in/yashas'
+      link: 'https://linkedin.com/in/yashasgatty',
+      username: 'in/yashasgatty'
     }
   ];
 
