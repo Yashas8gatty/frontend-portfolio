@@ -227,37 +227,55 @@ const Navigation = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] bg-background/95 backdrop-blur-lg flex flex-col justify-center animate-fade-in md:hidden">
-          <div className="absolute top-6 right-6">
+        <div className="fixed inset-0 z-[60] bg-background/98 backdrop-blur-xl flex flex-col justify-between animate-fade-in md:hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
+            <div className="flex items-center gap-2 font-mono font-semibold text-base tracking-wider">
+              <Terminal className="w-4 h-4 text-accent animate-pulse" />
+              <span className="text-foreground">
+                yashas<span className="text-accent">.</span>dev
+              </span>
+            </div>
+            
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 border border-white/5 rounded-lg bg-secondary/40 text-foreground"
+              className="p-2 border border-white/5 rounded-lg bg-secondary/40 text-foreground hover:text-accent hover:border-accent/20 transition-all duration-300"
             >
-              <X className="w-6 h-6" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="container mx-auto px-10 py-20 flex flex-col justify-between h-full">
-            <div className="flex flex-col gap-6 mt-10">
-              <div className="text-xs font-mono text-accent mb-2">// DIRECTORY</div>
+          {/* Menu Items Container */}
+          <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col justify-between">
+            <div className="flex flex-col gap-3">
+              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mb-2">// DIRECTORY</div>
               {navItems.map((item, index) => (
                 <button
                   key={item.id}
+                  id={`mobile-btn-${item.id}`}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-left py-2 font-mono text-3xl font-bold tracking-tight border-b border-white/5 hover:text-accent transition-colors"
-                  style={{ animationDelay: `${index * 0.05}s` }}
+                  className={`text-left py-3 px-4 font-mono text-sm font-medium tracking-wide rounded-xl border transition-all duration-300 ${
+                    activeSection === item.id 
+                      ? 'text-accent bg-accent/5 border-accent/10' 
+                      : 'text-muted-foreground border-transparent hover:text-foreground hover:bg-white/5'
+                  }`}
                 >
-                  <span className="text-accent mr-3">0{index + 1}.</span>
-                  {item.label.toLowerCase()}
+                  <span className="text-accent/40 mr-3 text-xs">0{index + 1}.</span>
+                  {item.label.toLowerCase()}()
                 </button>
               ))}
             </div>
 
-            <div className="space-y-4">
-              <div className="text-xs font-mono text-muted-foreground">// CONNECT</div>
-              <div className="flex flex-col gap-2 font-mono text-sm text-muted-foreground">
-                <a href="mailto:yashasgatty0@gmail.com" className="hover:text-accent transition-colors">yashasgatty0@gmail.com</a>
-                <a href="tel:+916361334462" className="hover:text-accent transition-colors">+91 6361334462</a>
+            {/* Footer */}
+            <div className="space-y-4 border-t border-white/5 pt-6 mt-8">
+              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">// CONNECT</div>
+              <div className="flex flex-col gap-2.5 font-mono text-xs text-slate-400">
+                <a href="mailto:yashasgatty0@gmail.com" className="flex items-center gap-2 hover:text-accent transition-colors py-1">
+                  <span className="text-accent">@</span> yashasgatty0@gmail.com
+                </a>
+                <a href="tel:+916361334462" className="flex items-center gap-2 hover:text-accent transition-colors py-1">
+                  <span className="text-accent">#</span> +91 6361334462
+                </a>
               </div>
             </div>
           </div>
