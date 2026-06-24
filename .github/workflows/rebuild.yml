@@ -1,0 +1,16 @@
+name: Daily Portfolio Rebuild
+
+on:
+  schedule:
+    # Run once every 2 days at midnight UTC (5:30 AM IST)
+    - cron: '0 0 */2 * *'
+  # Allows you to trigger this workflow manually from the Actions tab on GitHub
+  workflow_dispatch:
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Deploy Hook
+        run: |
+          curl -X POST "${{ secrets.DEPLOY_HOOK_URL }}"

@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "dev": "node scripts/fetch-github.cjs && vite --host",
+    "build": "node scripts/fetch-github.cjs && tsc && vite build",
+    "build:dev": "node scripts/fetch-github.cjs && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"
   },
