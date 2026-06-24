@@ -19,10 +19,27 @@ const Navigation = () => {
     }
   }, []);
 
+  const updateFavicon = (t: 'cyan' | 'red' | 'green') => {
+    const colors = {
+      red: { accent: '%23e52e4d', glow: '%23ff708d' },
+      cyan: { accent: '%2300f0ff', glow: '%2370f3ff' },
+      green: { accent: '%2300ff66', glow: '%23a3ff57' }
+    };
+    const c = colors[t];
+    
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs><rect width="32" height="32" rx="8" fill="%230b0d10" stroke="${c.accent}" stroke-width="1" stroke-opacity="0.15" /><path d="M9 10L15 16L9 22" stroke="${c.accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(%23glow-filter)" /><line x1="17" y1="22" x2="24" y2="22" stroke="${c.glow}" stroke-width="2.5" stroke-linecap="round" filter="url(%23glow-filter)" /></svg>`;
+    
+    const link = document.querySelector("link[type='image/svg+xml']") as HTMLLinkElement;
+    if (link) {
+      link.href = `data:image/svg+xml;utf8,${svg}`;
+    }
+  };
+
   const applyTheme = (t: 'cyan' | 'red' | 'green') => {
     const root = document.documentElement;
     root.classList.remove('theme-cyan', 'theme-red', 'theme-green');
     root.classList.add(`theme-${t}`);
+    updateFavicon(t);
   };
 
   const cycleTheme = () => {
