@@ -48,7 +48,7 @@ const About = () => {
   return (
     <section id="about" className="py-24 relative overflow-hidden line-grid dot-grid">
       <div className="container mx-auto px-6 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary border border-white/5 text-xs font-mono text-muted-foreground mb-4">
@@ -64,16 +64,16 @@ const About = () => {
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          
+
           {/* Main Story Box (Spans 2 cols on lg) */}
           <div className="lg:col-span-2 dev-window glow-card rounded-xl p-8 flex flex-col justify-between border-white/5" onMouseMove={handleMouseMove}>
             <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-white/5 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-4">
                 <div className="flex items-center gap-2">
                   <Compass className="w-5 h-5 text-primary" />
                   <h3 className="font-mono text-sm font-semibold tracking-wider uppercase text-foreground">yashas_journey.log</h3>
                 </div>
-                <div className="text-[10px] font-mono text-muted-foreground">LOC: MANGALURU</div>
+                <div className="text-[10px] font-mono text-muted-foreground sm:text-right">LOC: MANGALURU</div>
               </div>
 
               <div className="space-y-4 font-sans text-muted-foreground leading-relaxed text-sm sm:text-base">
@@ -86,15 +86,17 @@ const About = () => {
               </div>
             </div>
 
-            <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
+            <div className="mt-8 pt-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
               <span className="text-xs font-mono text-muted-foreground">// active_status: coding</span>
-              <Button 
-                variant="outline"
-                className="font-mono text-xs border-accent/20 hover:border-accent hover:bg-accent/5"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                download_resume()
-              </Button>
+              <a href="/Yashas-H-Gatty.pdf?v=1" target="_blank" rel="noopener noreferrer" className="inline-block w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-auto font-mono text-xs border-accent/20 hover:border-accent hover:bg-accent/5 flex items-center justify-center"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  download_resume()
+                </Button>
+              </a>
             </div>
           </div>
 

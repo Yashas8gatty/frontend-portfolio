@@ -78,7 +78,7 @@ const Hero = () => {
     const draw = () => {
       const rootStyle = getComputedStyle(document.documentElement);
       const accentColorRaw = rootStyle.getPropertyValue('--accent').trim();
-      const accentHSL = accentColorRaw ? `hsla(${accentColorRaw.replace(/\s+/g, ', ')}, 0.15)` : 'rgba(229, 46, 77, 0.15)';
+      const accentHSL = accentColorRaw ? `hsla(${accentColorRaw.replace(/\s+/g, ', ')}, 0.35)` : 'rgba(229, 46, 77, 0.35)';
 
       // Clear the canvas with destination-out to keep it transparent (no black accumulation overlay)
       ctx.globalCompositeOperation = 'destination-out';
@@ -242,7 +242,7 @@ Memory: Active and learning new systems`
   return (
     <section id="home" className="min-h-screen pt-28 pb-16 flex items-center justify-center relative overflow-hidden">
       {/* Background radial glow & falling matrix */}
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-[0.25] mix-blend-screen" />
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-[0.45] mix-blend-screen" />
       <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
 

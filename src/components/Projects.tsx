@@ -213,17 +213,17 @@ export const createCampaign = async (campaignData) => {
                 <Button
                   variant="ghost"
                   onClick={() => window.open(project.github, '_blank')}
-                  className="flex-1 font-mono text-xs border border-white/5 hover:bg-white/5 hover:text-accent rounded-lg py-2"
+                  className="flex-1 font-mono text-[10px] sm:text-xs border border-white/5 hover:bg-white/5 hover:text-accent rounded-lg py-2 px-1 flex items-center justify-center gap-1.5"
                 >
-                  <Github className="w-3.5 h-3.5 mr-2" />
+                  <Github className="w-3.5 h-3.5" />
                   source_code
                 </Button>
                 {project.demo !== '#' && (
                   <Button
                     onClick={() => window.open(project.demo, '_blank')}
-                    className="flex-1 gradient-accent text-accent-foreground font-mono text-xs rounded-lg py-2"
+                    className="flex-1 gradient-accent text-accent-foreground font-mono text-[10px] sm:text-xs rounded-lg py-2 px-1 flex items-center justify-center gap-1.5"
                   >
-                    <ExternalLink className="w-3.5 h-3.5 mr-2" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                     live
                   </Button>
                 )}

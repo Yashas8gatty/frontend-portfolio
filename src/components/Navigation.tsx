@@ -7,6 +7,26 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<'cyan' | 'red' | 'green'>('red');
+  const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0, opacity: 0 });
+
+  useEffect(() => {
+    const updateSlider = () => {
+      const activeButton = document.getElementById(`nav-btn-${activeSection}`);
+      if (activeButton) {
+        setSliderStyle({
+          left: activeButton.offsetLeft,
+          width: activeButton.clientWidth,
+          opacity: 1,
+        });
+      } else {
+        setSliderStyle(prev => ({ ...prev, opacity: 0 }));
+      }
+    };
+
+    updateSlider();
+    window.addEventListener('resize', updateSlider);
+    return () => window.removeEventListener('resize', updateSlider);
+  }, [activeSection]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('portfolio-theme') as 'cyan' | 'red' | 'green';
@@ -67,9 +87,12 @@ const Navigation = () => {
       
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(navItems[i].id);
-          break;
+        if (section) {
+          const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+          if (sectionTop <= scrollPosition) {
+            setActiveSection(navItems[i].id);
+            break;
+          }
         }
       }
     };
@@ -116,21 +139,40 @@ const Navigation = () => {
             </button>
             
             {/* Desktop Nav Items */}
-            <div className="hidden md:flex items-center gap-1 bg-secondary/30 border border-white/5 px-2 py-1.5 rounded-full">
+            <div className="relative hidden md:flex items-center gap-1 bg-secondary/30 border border-white/5 px-2 py-1.5 rounded-full">
+              {/* Sliding Pill Background */}
+              <div 
+                className="absolute rounded-full bg-white/5 transition-all duration-300 ease-out pointer-events-none"
+                style={{
+                  left: `${sliderStyle.left}px`,
+                  width: `${sliderStyle.width}px`,
+                  height: 'calc(100% - 12px)',
+                  top: '6px',
+                  opacity: sliderStyle.opacity,
+                }}
+              />
+
+              {/* Sliding Indicator Dot */}
+              <div 
+                className="absolute bottom-1 w-1 h-1 rounded-full bg-accent transition-all duration-300 ease-out pointer-events-none"
+                style={{
+                  left: `${sliderStyle.left + (sliderStyle.width / 2) - 2}px`,
+                  opacity: sliderStyle.opacity,
+                }}
+              />
+
               {navItems.map((item) => (
                 <button
                   key={item.id}
+                  id={`nav-btn-${item.id}`}
                   onClick={() => scrollToSection(item.id)}
-                  className={`relative py-1.5 px-4 text-xs font-mono font-medium rounded-full transition-all duration-300 ${
+                  className={`relative py-1.5 px-4 text-xs font-mono font-medium rounded-full transition-all duration-300 z-10 ${
                     activeSection === item.id 
-                      ? 'text-accent bg-white/5' 
+                      ? 'text-accent' 
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {item.label}
-                  {activeSection === item.id && (
-                    <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />
-                  )}
                 </button>
               ))}
             </div>
