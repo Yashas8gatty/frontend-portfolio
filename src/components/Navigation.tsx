@@ -51,9 +51,9 @@ const Navigation = () => {
       green: { accent: '%2300ff66', glow: '%23a3ff57' }
     };
     const c = colors[t];
-    
+
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs><rect width="32" height="32" rx="8" fill="%230b0d10" stroke="${c.accent}" stroke-width="1" stroke-opacity="0.15" /><path d="M9 10L15 16L9 22" stroke="${c.accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(%23glow-filter)" /><line x1="17" y1="22" x2="24" y2="22" stroke="${c.glow}" stroke-width="2.5" stroke-linecap="round" filter="url(%23glow-filter)" /></svg>`;
-    
+
     const link = document.querySelector("link[type='image/svg+xml']") as HTMLLinkElement;
     if (link) {
       link.href = `data:image/svg+xml;utf8,${svg}`;
@@ -86,10 +86,10 @@ const Navigation = () => {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      
+
       const sections = navItems.map(item => document.getElementById(item.id));
       const scrollPosition = window.scrollY + 120;
-      
+
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
         if (section) {
@@ -125,15 +125,14 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-background/80 backdrop-blur-md border-b border-white/5 py-3' 
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+          ? 'bg-background/80 backdrop-blur-md border-b border-white/5 py-3'
           : 'bg-transparent py-5'
-      }`}>
+        }`}>
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-center">
             {/* Logo */}
-            <button 
+            <button
               onClick={() => scrollToSection('home')}
               className="flex items-center gap-2 group font-mono font-semibold text-lg tracking-wider"
             >
@@ -142,11 +141,11 @@ const Navigation = () => {
                 yashas<span className="text-accent">.</span>dev
               </span>
             </button>
-            
+
             {/* Desktop Nav Items */}
             <div className="relative hidden md:flex items-center gap-1 bg-secondary/30 border border-white/5 px-2 py-1.5 rounded-full">
               {/* Sliding Pill Background */}
-              <div 
+              <div
                 className="absolute rounded-full bg-white/5 transition-all duration-300 ease-out pointer-events-none"
                 style={{
                   left: `${sliderStyle.left}px`,
@@ -158,7 +157,7 @@ const Navigation = () => {
               />
 
               {/* Sliding Indicator Dot */}
-              <div 
+              <div
                 className="absolute bottom-1 w-1 h-1 rounded-full bg-accent transition-all duration-300 ease-out pointer-events-none"
                 style={{
                   left: `${sliderStyle.left + (sliderStyle.width / 2) - 2}px`,
@@ -171,11 +170,10 @@ const Navigation = () => {
                   key={item.id}
                   id={`nav-btn-${item.id}`}
                   onClick={() => scrollToSection(item.id)}
-                  className={`relative py-1.5 px-4 text-xs font-mono font-medium rounded-full transition-all duration-300 z-10 ${
-                    activeSection === item.id 
-                      ? 'text-accent' 
+                  className={`relative py-1.5 px-4 text-xs font-mono font-medium rounded-full transition-all duration-300 z-10 ${activeSection === item.id
+                      ? 'text-accent'
                       : 'text-muted-foreground hover:text-foreground'
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </button>
@@ -193,13 +191,13 @@ const Navigation = () => {
                 <span className="uppercase text-foreground font-semibold">{theme}</span>
               </button>
 
-              <Button 
+              <Button
                 onClick={() => scrollToSection('contact')}
                 variant="outline"
                 size="sm"
                 className="font-mono text-xs border-accent/20 hover:border-accent hover:bg-accent/5 text-foreground hover:scale-105 transition-all duration-300"
               >
-                <span>chat.init()</span>
+                <span>init_chat()</span>
                 <ArrowUpRight className="w-3.5 h-3.5 ml-1 text-accent" />
               </Button>
             </div>
@@ -229,7 +227,7 @@ const Navigation = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-background/95 backdrop-blur-lg flex flex-col justify-center animate-fade-in md:hidden">
+        <div className="fixed inset-0 z-[60] bg-background/95 backdrop-blur-lg flex flex-col justify-center animate-fade-in md:hidden">
           <div className="absolute top-6 right-6">
             <button
               onClick={() => setIsMobileMenuOpen(false)}
