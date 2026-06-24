@@ -108,7 +108,7 @@ export default {
 				'glow': 'glow 2s ease-in-out infinite alternate'
 			},
 			fontFamily: {
-				sans: ['Inter', 'system-ui', 'sans-serif'],
+				sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
 				mono: ['JetBrains Mono', 'monospace']
 			}
 		}

@@ -1,77 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Modern Developer Portfolio Design System */
-
 @layer base {
   :root {
-    /* Portfolio Color Palette */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 216 18% 5%;
+    --foreground: 0 0% 91%;
 
-    --card: 240 10% 6%;
-    --card-foreground: 0 0% 98%;
+    --card: 223 17% 8%;
+    --card-foreground: 0 0% 91%;
 
-    --popover: 240 10% 6%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 223 17% 8%;
+    --popover-foreground: 0 0% 91%;
 
-    --primary: 263 70% 50%;
+    --primary: 252 100% 68%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 240 5% 14%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 223 17% 11%;
+    --secondary-foreground: 0 0% 91%;
 
-    --muted: 240 5% 14%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 223 17% 11%;
+    --muted-foreground: 220 10% 60%;
 
-    --accent: 195 100% 50%;
-    --accent-foreground: 240 10% 3.9%;
+    --accent: 185 100% 43%;
+    --accent-foreground: 216 18% 5%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 5% 14%;
-    --input: 240 5% 14%;
-    --ring: 263 70% 50%;
+    --border: 223 17% 12%;
+    --input: 223 17% 12%;
+    --ring: 185 100% 43%;
 
-    --radius: 1rem;
+    --radius: 14px;
 
-    /* Portfolio-specific colors */
-    --gradient-start: 263 70% 50%;
-    --gradient-end: 195 100% 50%;
-    --glass-bg: 240 10% 6%;
-    --glass-border: 240 5% 20%;
+    --gradient-start: 252 100% 68%;
+    --gradient-end: 185 100% 43%;
     
-    /* Animation variables */
-    --animation-duration: 0.6s;
-    --animation-delay: 0.1s;
-  }
-
-  /* Custom gradients */
-  .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-end)));
-  }
-
-  .gradient-text {
-    background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-end)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Glass morphism effect */
-  .glass {
-    background: hsla(var(--glass-bg) / 0.5);
-    backdrop-filter: blur(10px);
-    border: 1px solid hsla(var(--glass-border) / 0.3);
-  }
-
-  .glass-card {
-    background: hsla(var(--glass-bg) / 0.3);
-    backdrop-filter: blur(16px);
-    border: 1px solid hsla(var(--glass-border) / 0.2);
-    box-shadow: 0 8px 32px hsla(var(--primary) / 0.1);
+    --warm-accent: 31 100% 71%;
   }
 }
 
@@ -81,6 +49,134 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased selection:bg-accent/20 selection:text-white;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
   }
 }
+
+/* Premium Matrix Dot Grid Backgrounds */
+.dot-grid {
+  background-size: 24px 24px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.line-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.008) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.008) 1px, transparent 1px);
+}
+
+/* Custom Gradients */
+.gradient-accent {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 70%, #e8e8e8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-accent {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dev Window Styling - Soft border with minimal transparency */
+.dev-window {
+  position: relative;
+  background: rgba(17, 19, 24, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+}
+
+.dev-window::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  padding: 1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.005));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Glow Cards with Cursor Spotlight Borders (enabled only on pointer hover devices) */
+.glow-card {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) {
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px; /* border thickness */
+    background: radial-gradient(
+      180px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+      rgba(0, 199, 217, 0.35),
+      transparent 80%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+}
+
+.glow-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(0, 199, 217, 0.08);
+}
+
+/* Terminal typing caret blinking style */
+@keyframes cursor-blink {
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(11, 13, 16, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Custom glow utility - reduced blur/opacity */
+.neon-glow {
+  filter: drop-shadow(0 0 6px rgba(0, 199, 217, 0.2));
+}
