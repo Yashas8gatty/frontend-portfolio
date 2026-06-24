@@ -3,7 +3,7 @@
     "followers": 0,
     "repositories": 16,
     "stars": 0,
-    "totalContributions": 302,
+    "totalContributions": 303,
     "avatarUrl": "https://avatars.githubusercontent.com/u/181383100?v=4"
   },
   "insights": {
@@ -40,40 +40,64 @@
   ],
   "commits": [
     {
-      "repo": "market_campaignAI",
-      "message": "feat: Add analytics dashboard and scans tracking",
-      "sha": "47fa2c1",
-      "date": "Jun 22"
-    },
-    {
-      "repo": "ResumeRoast",
-      "message": "fix: Resolve Supabase connection timeout in ATS worker",
-      "sha": "a89cde2",
-      "date": "Jun 20"
+      "repo": "frontend-portfolio",
+      "message": "fix: Binary rain integrated globally",
+      "sha": "2ee00aa",
+      "date": "Jun 25"
     },
     {
       "repo": "frontend-portfolio",
-      "message": "style: Polish terminal window glassmorphism style",
-      "sha": "9ef8120",
-      "date": "Jun 19"
+      "message": "fix : deploy hook yml",
+      "sha": "723fe70",
+      "date": "Jun 25"
     },
     {
-      "repo": "educareer",
-      "message": "refactor: Move Graph-BERT scoring computation to worker thread",
-      "sha": "e38a0f1",
-      "date": "Jun 15"
+      "repo": "frontend-portfolio",
+      "message": "feat: Add dynamic Code & Contributions section with daily rebuild workflow",
+      "sha": "18238ad",
+      "date": "Jun 25"
+    },
+    {
+      "repo": "frontend-portfolio",
+      "message": "yellow theme added",
+      "sha": "6bbcb93",
+      "date": "Jun 24"
+    },
+    {
+      "repo": "frontend-portfolio",
+      "message": " site title",
+      "sha": "2eadca2",
+      "date": "Jun 24"
     },
     {
       "repo": "ResumeRoast",
-      "message": "feat: Implement ATS metadata parsing and LLM prompts configuration",
-      "sha": "109ba2c",
-      "date": "Jun 12"
+      "message": "fix: render certificate and feedback modals in mobile view",
+      "sha": "321af34",
+      "date": "Jun 23"
     },
     {
-      "repo": "market_campaignAI",
-      "message": "init: Set up Vite project structure and Tailwind CSS rules",
-      "sha": "b56ea10",
-      "date": "Jun 08"
+      "repo": "ResumeRoast",
+      "message": "fix: resolve mobile sticky click bug and older mobile browser canvas roundRect crash",
+      "sha": "1110519",
+      "date": "Jun 23"
+    },
+    {
+      "repo": "ResumeRoast",
+      "message": "fix/Mobile Cert Download",
+      "sha": "cd6c239",
+      "date": "Jun 23"
+    },
+    {
+      "repo": "truckhai-main",
+      "message": "Merge pull request #541 from truck-hai/fix0.1",
+      "sha": "ee91f8f",
+      "date": "Jun 23"
+    },
+    {
+      "repo": "truckhai-main",
+      "message": "Merge pull request #540 from truck-hai/optional",
+      "sha": "a1a3dcc",
+      "date": "Jun 23"
     }
   ],
   "grid": [

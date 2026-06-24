@@ -11,22 +11,37 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// 1. Try to load GITHUB_TOKEN from env or .env file
+// 1. Try to load GITHUB_TOKEN & EXTRA_REPOS from env or .env file
 let token = process.env.GITHUB_TOKEN;
-if (!token && fs.existsSync(ENV_FILE)) {
+let extraReposStr = process.env.EXTRA_REPOS;
+
+if (fs.existsSync(ENV_FILE)) {
   const envContent = fs.readFileSync(ENV_FILE, 'utf-8');
-  const match = envContent.match(/GITHUB_TOKEN\s*=\s*["']?([^"'\n]+)["']?/);
-  if (match) {
-    token = match[1].trim();
+  if (!token) {
+    const tokenMatch = envContent.match(/^GITHUB_TOKEN\s*=\s*["']?([^"'\n]+)["']?/m);
+    if (tokenMatch) {
+      token = tokenMatch[1].trim();
+    }
+  }
+  if (!extraReposStr) {
+    const extraMatch = envContent.match(/^EXTRA_REPOS\s*=\s*["']?([^"'\n]+)["']?/m);
+    if (extraMatch) {
+      extraReposStr = extraMatch[1].trim();
+    }
   }
 }
 
-// Helper: Fetch user events (recent commits)
-const fetchEvents = (token) => {
+let extraRepos = [];
+if (extraReposStr) {
+  extraRepos = extraReposStr.split(',').map(r => r.trim()).filter(Boolean);
+}
+
+// Helper: Fetch commits for a specific repository
+const fetchCommitsForRepo = (owner, repoName, token) => {
   return new Promise((resolve) => {
     const options = {
       hostname: 'api.github.com',
-      path: '/users/Yashas8gatty/events?per_page=30',
+      path: `/repos/${owner}/${repoName}/commits?author=Yashas8gatty&per_page=5`,
       method: 'GET',
       headers: {
         'User-Agent': 'Node-Fetch-Contributions',
@@ -42,8 +57,17 @@ const fetchEvents = (token) => {
       res.on('data', (chunk) => body += chunk);
       res.on('end', () => {
         try {
-          const events = JSON.parse(body);
-          resolve(Array.isArray(events) ? events : []);
+          const commits = JSON.parse(body);
+          if (Array.isArray(commits)) {
+            resolve(commits.map(c => ({
+              repo: repoName,
+              message: c.commit.message.split('\n')[0],
+              sha: c.sha.substring(0, 7),
+              date: new Date(c.commit.author.date)
+            })));
+          } else {
+            resolve([]);
+          }
         } catch (e) {
           resolve([]);
         }
@@ -53,25 +77,6 @@ const fetchEvents = (token) => {
     req.on('error', () => resolve([]));
     req.end();
   });
-};
-
-const getCommitsFromEvents = (events) => {
-  const commits = [];
-  events.forEach((event) => {
-    if (event.type === 'PushEvent' && event.payload && event.payload.commits) {
-      const repoName = event.repo.name.replace(/^Yashas8gatty\//, '');
-      event.payload.commits.forEach((commit) => {
-        const date = new Date(event.created_at);
-        commits.push({
-          repo: repoName,
-          message: commit.message,
-          sha: (commit.sha || '').substring(0, 7),
-          date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-        });
-      });
-    }
-  });
-  return commits.slice(0, 6);
 };
 
 // Fallbacks for simulated data
@@ -142,7 +147,7 @@ if (!token) {
   process.exit(0);
 }
 
-// GraphQL Query with Languages details
+// GraphQL Query with Repository Names, Owners & Languages details
 const query = `
 query($username: String!) {
   user(login: $username) {
@@ -150,9 +155,19 @@ query($username: String!) {
     followers {
       totalCount
     }
-    repositories(ownerAffiliations: OWNER, first: 100) {
+    ownedRepos: repositories(ownerAffiliations: OWNER) {
       totalCount
+    }
+    repositories(
+      ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER],
+      first: 100,
+      orderBy: {field: PUSHED_AT, direction: DESC}
+    ) {
       nodes {
+        name
+        owner {
+          login
+        }
         stargazers {
           totalCount
         }
@@ -214,24 +229,29 @@ const req = https.request(options, async (res) => {
         throw new Error('User not found in GraphQL response');
       }
 
-      // 1. Sum repository stars
+      // 1. Sum repository stars (only count user's own repos)
       const stars = (user.repositories.nodes || []).reduce((acc, repo) => {
-        return acc + (repo.stargazers ? repo.stargazers.totalCount : 0);
+        if (repo && repo.owner && repo.owner.login.toLowerCase() === 'yashas8gatty'.toLowerCase()) {
+          return acc + (repo.stargazers ? repo.stargazers.totalCount : 0);
+        }
+        return acc;
       }, 0);
 
-      // 2. Aggregate repository languages
+      // 2. Aggregate repository languages (only count user's own repos)
       const languageStats = {};
       (user.repositories.nodes || []).forEach(repo => {
-        if (repo.languages && repo.languages.edges) {
-          repo.languages.edges.forEach(edge => {
-            const name = edge.node.name;
-            const size = edge.size || 0;
-            const color = edge.node.color || '#cccccc';
-            if (!languageStats[name]) {
-              languageStats[name] = { size: 0, color };
-            }
-            languageStats[name].size += size;
-          });
+        if (repo && repo.owner && repo.owner.login.toLowerCase() === 'yashas8gatty'.toLowerCase()) {
+          if (repo.languages && repo.languages.edges) {
+            repo.languages.edges.forEach(edge => {
+              const name = edge.node.name;
+              const size = edge.size || 0;
+              const color = edge.node.color || '#cccccc';
+              if (!languageStats[name]) {
+                languageStats[name] = { size: 0, color };
+              }
+              languageStats[name].size += size;
+            });
+          }
         }
       });
 
@@ -311,17 +331,44 @@ const req = https.request(options, async (res) => {
         grid.push(weekData);
       }
 
-      // 5. Fetch recent commits log
-      const events = await fetchEvents(token);
-      let commits = getCommitsFromEvents(events);
-      if (commits.length === 0) {
-        commits = getFallbackCommits();
-      }
+      // 5. Build target list of repositories (owner + name) to fetch commits for
+      // First, parse and add any EXTRA_REPOS from env configuration
+      const targetRepos = extraRepos.map(fullName => {
+        const parts = fullName.split('/');
+        return parts.length === 2 ? { owner: parts[0], name: parts[1] } : null;
+      }).filter(Boolean);
+
+      // Then, add repositories from GraphQL response (avoiding duplicates)
+      const existingNames = new Set(targetRepos.map(r => `${r.owner}/${r.name}`.toLowerCase()));
+      (user.repositories.nodes || []).forEach(repo => {
+        if (repo && repo.owner && repo.name) {
+          const identifier = `${repo.owner.login}/${repo.name}`.toLowerCase();
+          if (!existingNames.has(identifier)) {
+            targetRepos.push({ owner: repo.owner.login, name: repo.name });
+            existingNames.add(identifier);
+          }
+        }
+      });
+
+      console.log(`Querying actual commits for repositories: ${targetRepos.slice(0, 8).map(r => `${r.owner}/${r.name}`).join(', ')}...`);
+      
+      const commitsPromises = targetRepos.slice(0, 8).map(repo => fetchCommitsForRepo(repo.owner, repo.name, token));
+      const commitsResults = await Promise.all(commitsPromises);
+      
+      const allCommits = commitsResults.flat()
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .slice(0, 10)
+        .map(c => ({
+          repo: c.repo,
+          message: c.message,
+          sha: c.sha,
+          date: c.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        }));
 
       const finalData = {
         stats: {
           followers: user.followers.totalCount || 0,
-          repositories: user.repositories.totalCount || 0,
+          repositories: user.ownedRepos ? user.ownedRepos.totalCount : (user.repositories.totalCount || 0),
           stars: stars,
           totalContributions: user.contributionsCollection.contributionCalendar.totalContributions || 0,
           avatarUrl: user.avatarUrl || ''
@@ -332,12 +379,13 @@ const req = https.request(options, async (res) => {
           busyDay
         },
         languages: languages.length > 0 ? languages : getFallbackData().languages,
-        commits: commits,
+        commits: allCommits.length > 0 ? allCommits : getFallbackCommits(),
         grid: grid
       };
 
       fs.writeFileSync(DATA_FILE, JSON.stringify(finalData, null, 2));
       console.log(`GitHub database written successfully to ${DATA_FILE}`);
+      console.log(`Fetched ${finalData.commits.length} actual commits across your repositories.`);
     } catch (err) {
       console.error('Error parsing GraphQL API response:', err.message);
       fs.writeFileSync(DATA_FILE, JSON.stringify(getFallbackData(), null, 2));

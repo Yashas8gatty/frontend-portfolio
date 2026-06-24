@@ -318,13 +318,17 @@ const GithubContributions = () => {
               {commits && commits.map((commit, idx) => (
                 <div 
                   key={idx} 
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-slate-300 hover:text-white transition-colors duration-200 py-1.5 border-b border-white/[0.02]"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 text-slate-300 hover:text-white transition-colors duration-200 py-1.5 border-b border-white/[0.02] min-w-0"
                 >
-                  <div className="flex items-start sm:items-center gap-2 truncate">
+                  <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
                     <span className="text-accent shrink-0 font-bold font-sans">➜</span>
-                    <span className="text-primary shrink-0 font-semibold">[{commit.repo}]</span>
+                    <span className="text-primary shrink-0 font-semibold truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[180px]" title={commit.repo}>
+                      [{commit.repo}]
+                    </span>
                     <span className="text-muted-foreground font-semibold shrink-0">{commit.sha}</span>
-                    <span className="truncate text-slate-200">{commit.message}</span>
+                    <span className="truncate text-slate-200 flex-1 min-w-0" title={commit.message}>
+                      {commit.message}
+                    </span>
                   </div>
                   <div className="text-[10px] text-muted-foreground shrink-0 pl-6 sm:pl-0">{commit.date}</div>
                 </div>
