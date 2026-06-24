@@ -6,7 +6,7 @@ const Navigation = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<'cyan' | 'red' | 'green'>('red');
+  const [theme, setTheme] = useState<'cyan' | 'red' | 'yellow' | 'green'>('red');
   const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0, opacity: 0 });
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const Navigation = () => {
   }, [activeSection]);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('portfolio-theme') as 'cyan' | 'red' | 'green';
+    const savedTheme = localStorage.getItem('portfolio-theme') as 'cyan' | 'red' | 'yellow' | 'green';
     if (savedTheme) {
       setTheme(savedTheme);
       applyTheme(savedTheme);
@@ -44,11 +44,12 @@ const Navigation = () => {
     }
   }, []);
 
-  const updateFavicon = (t: 'cyan' | 'red' | 'green') => {
+  const updateFavicon = (t: 'cyan' | 'red' | 'yellow' | 'green') => {
     const colors = {
       red: { accent: '%23e52e4d', glow: '%23ff708d' },
       cyan: { accent: '%2300f0ff', glow: '%2370f3ff' },
-      green: { accent: '%2300ff66', glow: '%23a3ff57' }
+      green: { accent: '%2300ff66', glow: '%23a3ff57' },
+      yellow: { accent: '%23f59e0b', glow: '%23fde047' }
     };
     const c = colors[t];
 
@@ -60,15 +61,15 @@ const Navigation = () => {
     }
   };
 
-  const applyTheme = (t: 'cyan' | 'red' | 'green') => {
+  const applyTheme = (t: 'cyan' | 'red' | 'yellow' | 'green') => {
     const root = document.documentElement;
-    root.classList.remove('theme-cyan', 'theme-red', 'theme-green');
+    root.classList.remove('theme-cyan', 'theme-red', 'theme-green', 'theme-yellow');
     root.classList.add(`theme-${t}`);
     updateFavicon(t);
   };
 
   const cycleTheme = () => {
-    const nextTheme = theme === 'cyan' ? 'red' : theme === 'red' ? 'green' : 'cyan';
+    const nextTheme = theme === 'cyan' ? 'red' : theme === 'red' ? 'yellow' : theme === 'yellow' ? 'green' : 'cyan';
     setTheme(nextTheme);
     applyTheme(nextTheme);
     localStorage.setItem('portfolio-theme', nextTheme);
