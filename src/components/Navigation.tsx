@@ -1,11 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Terminal, ArrowUpRight } from 'lucide-react';
+import { Menu, X, Terminal, ArrowUpRight, Palette } from 'lucide-react';
 
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'cyan' | 'red' | 'green'>('red');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('portfolio-theme') as 'cyan' | 'red' | 'green';
+    if (savedTheme) {
+      setTheme(savedTheme);
+      applyTheme(savedTheme);
+    } else {
+      setTheme('red');
+      applyTheme('red');
+    }
+  }, []);
+
+  const applyTheme = (t: 'cyan' | 'red' | 'green') => {
+    const root = document.documentElement;
+    root.classList.remove('theme-cyan', 'theme-red', 'theme-green');
+    root.classList.add(`theme-${t}`);
+  };
+
+  const cycleTheme = () => {
+    const nextTheme = theme === 'cyan' ? 'red' : theme === 'red' ? 'green' : 'cyan';
+    setTheme(nextTheme);
+    applyTheme(nextTheme);
+    localStorage.setItem('portfolio-theme', nextTheme);
+  };
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -94,7 +119,16 @@ const Navigation = () => {
             </div>
 
             {/* Desktop Action */}
-            <div className="hidden md:block">
+            <div className="hidden md:flex items-center gap-3">
+              <button
+                onClick={cycleTheme}
+                className="p-2 border border-white/5 bg-secondary/30 hover:border-accent/40 text-muted-foreground hover:text-accent rounded-xl hover:scale-115 transition-all duration-300 flex items-center gap-1.5 font-mono text-[10px]"
+                title="Switch Color Theme"
+              >
+                <Palette className="w-4 h-4 text-accent" />
+                <span className="uppercase text-foreground font-semibold">{theme}</span>
+              </button>
+
               <Button 
                 onClick={() => scrollToSection('contact')}
                 variant="outline"
@@ -107,7 +141,16 @@ const Navigation = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center">
+            <div className="md:hidden flex items-center gap-2">
+              <button
+                onClick={cycleTheme}
+                className="p-2.5 border border-white/5 bg-secondary/40 hover:border-accent/40 text-muted-foreground hover:text-accent rounded-lg transition-all duration-300 flex items-center gap-1 font-mono text-[9px]"
+                title="Switch Color Theme"
+              >
+                <Palette className="w-3.5 h-3.5 text-accent" />
+                <span className="uppercase text-foreground font-semibold">{theme}</span>
+              </button>
+
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 border border-white/5 rounded-lg bg-secondary/40 text-foreground hover:text-accent transition-colors"

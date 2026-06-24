@@ -6,40 +6,107 @@
 
 @layer base {
   :root {
-    --background: 216 18% 5%;
-    --foreground: 0 0% 91%;
+    /* Red (Default fallback theme) */
+    --background: 240 11% 3.5%;
+    --foreground: 240 6% 91%;
 
-    --card: 223 17% 8%;
-    --card-foreground: 0 0% 91%;
+    --card: 240 9% 6.5%;
+    --card-foreground: 240 6% 91%;
 
-    --popover: 223 17% 8%;
-    --popover-foreground: 0 0% 91%;
+    --popover: 240 9% 6.5%;
+    --popover-foreground: 240 6% 91%;
 
-    --primary: 252 100% 68%;
+    --primary: 348 100% 72%;
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 223 17% 11%;
-    --secondary-foreground: 0 0% 91%;
+    --secondary: 240 9% 10%;
+    --secondary-foreground: 240 6% 91%;
 
-    --muted: 223 17% 11%;
-    --muted-foreground: 220 10% 60%;
+    --muted: 240 9% 10%;
+    --muted-foreground: 240 5% 60%;
 
-    --accent: 185 100% 43%;
-    --accent-foreground: 216 18% 5%;
+    --accent: 350 78% 54%;
+    --accent-foreground: 240 11% 3.5%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 223 17% 12%;
-    --input: 223 17% 12%;
-    --ring: 185 100% 43%;
+    --border: 240 9% 11%;
+    --input: 240 9% 11%;
+    --ring: 350 78% 54%;
 
     --radius: 14px;
 
-    --gradient-start: 252 100% 68%;
-    --gradient-end: 185 100% 43%;
+    --gradient-start: 348 100% 72%;
+    --gradient-end: 350 78% 54%;
     
     --warm-accent: 31 100% 71%;
+  }
+
+  .theme-cyan {
+    --background: 216 18% 5%;
+    --foreground: 0 0% 91%;
+    --card: 223 17% 8%;
+    --card-foreground: 0 0% 91%;
+    --popover: 223 17% 8%;
+    --popover-foreground: 0 0% 91%;
+    --primary: 252 100% 68%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 223 17% 11%;
+    --secondary-foreground: 0 0% 91%;
+    --muted: 223 17% 11%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 185 100% 43%;
+    --accent-foreground: 216 18% 5%;
+    --border: 223 17% 12%;
+    --input: 223 17% 12%;
+    --ring: 185 100% 43%;
+    --gradient-start: 252 100% 68%;
+    --gradient-end: 185 100% 43%;
+  }
+
+  .theme-red {
+    --background: 240 11% 3.5%;
+    --foreground: 240 6% 91%;
+    --card: 240 9% 6.5%;
+    --card-foreground: 240 6% 91%;
+    --popover: 240 9% 6.5%;
+    --popover-foreground: 240 6% 91%;
+    --primary: 348 100% 72%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 9% 10%;
+    --secondary-foreground: 240 6% 91%;
+    --muted: 240 9% 10%;
+    --muted-foreground: 240 5% 60%;
+    --accent: 350 78% 54%;
+    --accent-foreground: 240 11% 3.5%;
+    --border: 240 9% 11%;
+    --input: 240 9% 11%;
+    --ring: 350 78% 54%;
+    --gradient-start: 348 100% 72%;
+    --gradient-end: 350 78% 54%;
+  }
+
+  .theme-green {
+    --background: 150 18% 3%;
+    --foreground: 150 6% 91%;
+    --card: 150 16% 6%;
+    --card-foreground: 150 6% 91%;
+    --popover: 150 16% 6%;
+    --popover-foreground: 150 6% 91%;
+    --primary: 90 100% 67%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 150 16% 9%;
+    --secondary-foreground: 150 6% 91%;
+    --muted: 150 16% 9%;
+    --muted-foreground: 150 5% 60%;
+    --accent: 141 100% 45%;
+    --accent-foreground: 150 18% 3%;
+    --border: 150 16% 10%;
+    --input: 150 16% 10%;
+    --ring: 141 100% 45%;
+    --gradient-start: 90 100% 67%;
+    --gradient-end: 141 100% 45%;
   }
 }
 
@@ -127,7 +194,7 @@
     padding: 1px; /* border thickness */
     background: radial-gradient(
       180px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-      rgba(0, 199, 217, 0.35),
+      hsl(var(--accent) / 0.35),
       transparent 80%
     );
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -146,7 +213,7 @@
 
 .glow-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 12px rgba(0, 199, 217, 0.08);
+  box-shadow: 0 0 12px hsl(var(--accent) / 0.08);
 }
 
 /* Terminal typing caret blinking style */
@@ -178,5 +245,5 @@
 
 /* Custom glow utility - reduced blur/opacity */
 .neon-glow {
-  filter: drop-shadow(0 0 6px rgba(0, 199, 217, 0.2));
+  filter: drop-shadow(0 0 6px hsl(var(--accent) / 0.2));
 }

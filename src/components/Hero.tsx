@@ -6,16 +6,19 @@ import profileImage from '@/assets/profile-photo.jpg';
 const Hero = () => {
   const [inputVal, setInputVal] = useState('');
   const [terminalLogs, setTerminalLogs] = useState<{ type: 'input' | 'system' | 'output'; text: string }[]>([]);
-  const terminalEndRef = useRef<HTMLDivElement>(null);
+  const terminalLogsContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const commandKeys = ['about', 'skills', 'projects', 'neofetch', 'contact', 'clear', 'github', 'help'];
   const suggestion = inputVal ? commandKeys.find(c => c.startsWith(inputVal.trim().toLowerCase()) && c !== inputVal.trim().toLowerCase()) || '' : '';
 
-  // Auto scroll to bottom of terminal
+  // Auto scroll to bottom of terminal container only (prevents browser window scroll jumps)
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = terminalLogsContainerRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, [terminalLogs]);
 
   // Terminal boot simulation
@@ -52,29 +55,46 @@ const Hero = () => {
     let animationFrameId: number;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      if (canvas.parentElement) {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+      } else {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
     };
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
     const chars = '01';
     const fontSize = 12;
-    const columns = Math.ceil(canvas.width / fontSize);
-
+    
     const drops: number[] = [];
-    for (let x = 0; x < columns; x++) {
+    const initialColumns = Math.ceil(window.innerWidth / fontSize);
+    for (let x = 0; x < initialColumns; x++) {
       drops[x] = Math.random() * -120;
     }
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(11, 13, 16, 0.08)';
+      const rootStyle = getComputedStyle(document.documentElement);
+      const accentColorRaw = rootStyle.getPropertyValue('--accent').trim();
+      const accentHSL = accentColorRaw ? `hsla(${accentColorRaw.replace(/\s+/g, ', ')}, 0.15)` : 'rgba(229, 46, 77, 0.15)';
+
+      // Clear the canvas with destination-out to keep it transparent (no black accumulation overlay)
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = 'rgba(0, 199, 217, 0.12)'; // Cyan falling characters
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = accentHSL;
       ctx.font = `${fontSize}px monospace`;
 
-      for (let i = 0; i < drops.length; i++) {
+      const currentColumns = Math.ceil(canvas.width / fontSize);
+      while (drops.length < currentColumns) {
+        drops.push(Math.random() * -120);
+      }
+
+      for (let i = 0; i < currentColumns; i++) {
         if (Math.random() > 0.985 && drops[i] * fontSize > canvas.height) {
           drops[i] = 0;
         }
@@ -222,7 +242,7 @@ Memory: Active and learning new systems`
   return (
     <section id="home" className="min-h-screen pt-28 pb-16 flex items-center justify-center relative overflow-hidden">
       {/* Background radial glow & falling matrix */}
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-[0.8] mix-blend-screen" />
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-[0.25] mix-blend-screen" />
       <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -323,7 +343,7 @@ Memory: Active and learning new systems`
               </div>
 
               {/* Terminal Logs Panel */}
-              <div className="flex-1 p-5 overflow-y-auto space-y-2.5 max-h-[260px] text-xs md:text-sm">
+              <div ref={terminalLogsContainerRef} className="flex-1 p-5 overflow-y-auto space-y-2.5 max-h-[260px] text-xs md:text-sm">
                 {terminalLogs.map((log, index) => (
                   <div
                     key={index}
@@ -337,7 +357,6 @@ Memory: Active and learning new systems`
                     {log.text}
                   </div>
                 ))}
-                <div ref={terminalEndRef} />
               </div>
 
               {/* Terminal Input Line */}
