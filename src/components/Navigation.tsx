@@ -24,6 +24,11 @@ const Navigation = () => {
     };
 
     updateSlider();
+
+    if (document.fonts) {
+      document.fonts.ready.then(updateSlider);
+    }
+
     window.addEventListener('resize', updateSlider);
     return () => window.removeEventListener('resize', updateSlider);
   }, [activeSection]);
@@ -194,7 +199,7 @@ const Navigation = () => {
                 size="sm"
                 className="font-mono text-xs border-accent/20 hover:border-accent hover:bg-accent/5 text-foreground hover:scale-105 transition-all duration-300"
               >
-                <span>init_chat()</span>
+                <span>chat.init()</span>
                 <ArrowUpRight className="w-3.5 h-3.5 ml-1 text-accent" />
               </Button>
             </div>
