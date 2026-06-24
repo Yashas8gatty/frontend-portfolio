@@ -28,7 +28,7 @@ const Skills = () => {
         { name: 'JavaScript', level: 'Expert', projects: ['ResumeRoast', 'EduCareer'], details: 'Experienced in core JavaScript (ES6+), DOM operations, async processes, and full-stack scripting.', since: '2022' },
         { name: 'TypeScript', level: 'Proficient', projects: ['ResumeRoast', 'Portfolio'], details: 'Enforces robust type safety, type declaration files, interfaces, and strict build-time validation.', since: '2023' },
         { name: 'SQL', level: 'Proficient', projects: ['ResumeRoast', 'Data Models'], details: 'Writing complex relational database queries, table schema designs, indexing, and joins optimization.', since: '2023' },
-        { name: 'C', level: 'Familiar', projects: ['Academic Tasks'], details: 'Academic background in low-level programming, compiler tasks, and core computational complexity.', since: '2022' },
+        { name: 'C', level: 'Proficient', projects: ['Academic Tasks'], details: 'Academic background in low-level programming, compiler tasks, and core computational complexity.', since: '2022' },
       ]
     },
     {
@@ -97,7 +97,7 @@ const Skills = () => {
   return (
     <section id="skills" className="py-24 relative overflow-hidden line-grid dot-grid">
       <div className="container mx-auto px-6 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary border border-white/5 text-xs font-mono text-muted-foreground mb-4">
@@ -119,11 +119,10 @@ const Skills = () => {
               <button
                 key={category.id}
                 onClick={() => handleTabChange(index)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-mono text-xs tracking-wider uppercase transition-all duration-300 ${
-                  activeTab === index
-                    ? 'border-accent/30 bg-accent/5 text-accent font-semibold'
-                    : 'border-white/5 bg-secondary/30 text-muted-foreground hover:bg-white/5 hover:text-foreground'
-                }`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border font-mono text-xs tracking-wider uppercase transition-all duration-300 ${activeTab === index
+                  ? 'border-accent/30 bg-accent/5 text-accent font-semibold'
+                  : 'border-white/5 bg-secondary/70 text-muted-foreground hover:bg-white/5 hover:text-foreground'
+                  }`}
               >
                 <Icon className="w-4 h-4" />
                 {category.title}
@@ -134,7 +133,7 @@ const Skills = () => {
 
         {/* Main Grid: Selector List vs JSON Inspector Panel */}
         <div className="grid lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-stretch">
-          
+
           {/* Skill Selector List (Spans 7 cols) */}
           <div className="lg:col-span-6 flex flex-col gap-3">
             <div className="font-mono text-xs text-muted-foreground mb-1 flex items-center gap-1.5 px-1 select-none">
@@ -148,11 +147,10 @@ const Skills = () => {
                   key={skill.name}
                   onClick={() => setSelectedSkill(skill)}
                   onMouseMove={handleMouseMove}
-                  className={`text-left p-4 rounded-xl border flex flex-col justify-between min-h-[100px] transition-all duration-300 group relative overflow-hidden glow-card ${
-                    selectedSkill.name === skill.name
-                      ? 'border-accent/40 bg-accent/5'
-                      : 'border-white/5 bg-secondary/20 hover:bg-white/5 hover:border-white/10'
-                  }`}
+                  className={`text-left p-4 rounded-xl border flex flex-col justify-between min-h-[100px] transition-all duration-300 group relative overflow-hidden glow-card ${selectedSkill.name === skill.name
+                    ? 'border-accent/40 bg-secondary'
+                    : 'border-white/5 bg-secondary/70 hover:bg-secondary hover:border-white/10'
+                    }`}
                 >
                   <div className="flex justify-between items-start w-full">
                     <span className="font-mono font-bold text-sm tracking-tight text-foreground">
@@ -162,7 +160,7 @@ const Skills = () => {
                       <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                     )}
                   </div>
-                  
+
                   <div className="flex justify-between items-center w-full mt-4 font-mono text-[10px]">
                     <span className="text-muted-foreground">LVL: {skill.level}</span>
                     <span className="text-primary/60 group-hover:text-primary transition-colors font-semibold">inspect()</span>
@@ -239,7 +237,7 @@ const Skills = () => {
           </h3>
           <div className="flex flex-wrap justify-center gap-2.5 max-w-2xl mx-auto">
             {[
-              'Keras', 'Tableau', 'FastAPI', 'Sentence-BERT', 
+              'Keras', 'Tableau', 'FastAPI', 'Sentence-BERT',
               'Graph-BERT', 'OCR', 'Python Flask', 'SQL Server'
             ].map((skill) => (
               <span

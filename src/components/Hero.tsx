@@ -8,7 +8,6 @@ const Hero = () => {
   const [terminalLogs, setTerminalLogs] = useState<{ type: 'input' | 'system' | 'output'; text: string }[]>([]);
   const terminalLogsContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const commandKeys = ['about', 'skills', 'projects', 'neofetch', 'contact', 'clear', 'github', 'help'];
   const suggestion = inputVal ? commandKeys.find(c => c.startsWith(inputVal.trim().toLowerCase()) && c !== inputVal.trim().toLowerCase()) || '' : '';
@@ -44,78 +43,6 @@ const Hero = () => {
     return () => timers.forEach(clearTimeout);
   }, []);
 
-  // Matrix Background Canvas Animation
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-
-    const resizeCanvas = () => {
-      if (canvas.parentElement) {
-        canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = canvas.parentElement.clientHeight;
-      } else {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const chars = '01';
-    const fontSize = 12;
-    
-    const drops: number[] = [];
-    const initialColumns = Math.ceil(window.innerWidth / fontSize);
-    for (let x = 0; x < initialColumns; x++) {
-      drops[x] = Math.random() * -120;
-    }
-
-    const draw = () => {
-      const rootStyle = getComputedStyle(document.documentElement);
-      const accentColorRaw = rootStyle.getPropertyValue('--accent').trim();
-      const accentHSL = accentColorRaw ? `hsla(${accentColorRaw.replace(/\s+/g, ', ')}, 0.5)` : 'rgba(229, 46, 77, 0.5)';
-
-      // Clear the canvas with destination-out to keep it transparent (no black accumulation overlay)
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = accentHSL;
-      ctx.font = `${fontSize}px monospace`;
-
-      const currentColumns = Math.ceil(canvas.width / fontSize);
-      while (drops.length < currentColumns) {
-        drops.push(Math.random() * -120);
-      }
-
-      for (let i = 0; i < currentColumns; i++) {
-        if (Math.random() > 0.985 && drops[i] * fontSize > canvas.height) {
-          drops[i] = 0;
-        }
-
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        const x = i * fontSize;
-        const y = Math.floor(drops[i]) * fontSize;
-
-        ctx.fillText(text, x, y);
-        drops[i] += 0.5;
-      }
-      animationFrameId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
-    };
-  }, []);
 
   const handleCommand = (command: string) => {
     const trimmedCmd = command.trim().toLowerCase();
@@ -241,8 +168,7 @@ Memory: Active and learning new systems`
 
   return (
     <section id="home" className="min-h-screen pt-28 pb-16 flex items-center justify-center relative overflow-hidden">
-      {/* Background radial glow & falling matrix */}
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none opacity-[0.55] mix-blend-screen" />
+      {/* Background radial glow */}
       <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
 
