@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Download, GraduationCap, Heart, Code2, Clock, MapPin, Compass, Laptop, Award } from 'lucide-react';
+import { Download, GraduationCap, Heart, Code2, Clock, MapPin, Compass, Laptop, Award, User } from 'lucide-react';
 
 const About = () => {
   const [localTime, setLocalTime] = useState('');
@@ -42,7 +42,7 @@ const About = () => {
     { label: 'Active Internship', value: '1' },
     { label: 'Featured Projects', value: '3' },
     { label: 'Core Tech Stack', value: '10+' },
-    { label: 'Academic Years', value: '3' },
+    { label: 'Academic Years', value: '4' },
   ];
 
   return (
@@ -65,6 +65,39 @@ const About = () => {
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
+          {/* Portrait Profile Photo Card (Spans 1 col, 2 rows on lg) */}
+          <div className="lg:col-span-1 lg:row-span-2 relative dev-window glow-card rounded-xl overflow-hidden border-white/5 flex flex-col justify-between p-8 group min-h-[420px]" onMouseMove={handleMouseMove}>
+            {/* Grayscale Background Profile Image with Hover Transition */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src="/yashas.jpeg"
+                alt="Yashas"
+                className="w-full h-full object-cover filter grayscale contrast-115 brightness-90 group-hover:scale-105 group-hover:filter-none transition-all duration-700 ease-out"
+              />
+              {/* Dark overlay gradients to fade bottom and blend top */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-95" />
+              <div className="absolute inset-0 bg-gradient-to-b from-accent/15 via-transparent to-transparent pointer-events-none" />
+            </div>
+
+            {/* Typography Overlay Behind Text Content */}
+            <div className="absolute inset-0 flex flex-col justify-center translate-y-48 px-8 pointer-events-none select-none opacity-10 group-hover:opacity-10 transition-opacity duration-500">
+              <span className="font-sans font-extrabold text-5xl leading-none text-foreground uppercase tracking-widest block">IMAGINE</span>
+              <span className="font-sans font-extrabold text-5xl leading-none text-foreground uppercase tracking-widest block mt-2">FOCUS</span>
+              <span className="font-sans font-extrabold text-5xl leading-none text-foreground uppercase tracking-widest block mt-2">BUILD</span>
+            </div>
+
+            {/* Top-Left Icon Badge */}
+            <div className="z-10 w-10 h-10 rounded-xl bg-secondary/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-accent shadow-lg">
+              <User className="w-5 h-5" />
+            </div>
+
+            {/* Bottom Info Labels */}
+            <div className="z-10 mt-auto">
+              <p className="font-mono text-[10px] sm:text-xs text-accent/80 tracking-wide">// A journey, told in moments.</p>
+              <h3 className="font-sans text-xl font-bold text-foreground mt-1">About Me</h3>
+            </div>
+          </div>
+
           {/* Main Story Box (Spans 2 cols on lg) */}
           <div className="lg:col-span-2 dev-window glow-card rounded-xl p-8 flex flex-col justify-between border-white/5" onMouseMove={handleMouseMove}>
             <div className="space-y-6">
@@ -78,7 +111,7 @@ const About = () => {
 
               <div className="space-y-4 font-sans text-muted-foreground leading-relaxed text-sm sm:text-base">
                 <p>
-                  I am a third-year student pursuing a B.E. in <span className="text-foreground font-semibold">Artificial Intelligence & Machine Learning</span> at Canara Engineering College. Alongside my academic focus, I build production-facing frontend applications as an intern, translating design layouts into scalable code.
+                  I am a fourth-year student pursuing a B.E. in <span className="text-foreground font-semibold">Artificial Intelligence & Machine Learning</span> at Canara Engineering College. Alongside my academic focus, I build production-facing frontend applications as an intern, translating design layouts into scalable code.
                 </p>
                 <p>
                   My development interests span client-side systems, responsive user interfaces, and the integration of machine learning models. I specialize in building modular UI components with <span className="text-foreground font-semibold">React.js, TypeScript, and Tailwind CSS</span>, aiming to create intuitive and intelligent web products.
@@ -134,28 +167,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* Passion Box (Spans 2 cols on lg) */}
-          <div className="lg:col-span-2 dev-window glow-card rounded-xl p-8 flex flex-col justify-between border-white/5" onMouseMove={handleMouseMove}>
-            <div className="space-y-6">
-              <div className="flex items-center gap-2 border-b border-white/5 pb-4">
-                <GraduationCap className="w-5 h-5 text-primary" />
-                <h3 className="font-mono text-sm font-semibold tracking-wider uppercase text-foreground">core_focus_areas</h3>
-              </div>
-
-              <div className="grid sm:grid-cols-3 gap-6">
-                {passions.map((p, idx) => (
-                  <div key={idx} className="space-y-3">
-                    <div className="w-10 h-10 rounded-lg bg-secondary/50 border border-white/5 flex items-center justify-center text-primary">
-                      <p.icon className="w-5 h-5" />
-                    </div>
-                    <h4 className="font-mono text-xs font-bold text-foreground uppercase">{p.title}</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
           {/* Education & Mini stats block (Spans 1 col) */}
           <div className="dev-window glow-card rounded-xl p-8 flex flex-col justify-between border-white/5" onMouseMove={handleMouseMove}>
             <div className="space-y-6">
@@ -176,6 +187,28 @@ const About = () => {
 
             <div className="pt-4 border-t border-white/5 text-[10px] font-mono text-muted-foreground leading-relaxed">
               * metrics collected from active repository logs
+            </div>
+          </div>
+
+          {/* Passion Box (Spans 3 cols on lg) */}
+          <div className="lg:col-span-3 dev-window glow-card rounded-xl p-8 flex flex-col justify-between border-white/5" onMouseMove={handleMouseMove}>
+            <div className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-white/5 pb-4">
+                <GraduationCap className="w-5 h-5 text-primary" />
+                <h3 className="font-mono text-sm font-semibold tracking-wider uppercase text-foreground">core_focus_areas</h3>
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-6">
+                {passions.map((p, idx) => (
+                  <div key={idx} className="space-y-3">
+                    <div className="w-10 h-10 rounded-lg bg-secondary/50 border border-white/5 flex items-center justify-center text-primary">
+                      <p.icon className="w-5 h-5" />
+                    </div>
+                    <h4 className="font-mono text-xs font-bold text-foreground uppercase">{p.title}</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{p.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

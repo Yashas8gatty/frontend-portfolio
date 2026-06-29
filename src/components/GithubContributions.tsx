@@ -25,21 +25,35 @@ const GithubContributions = () => {
     return `${count} contributions on ${dateStr}`;
   };
 
-  // 12 Months horizontal layout spacing helper
-  const monthLabels = [
-    { name: 'Jul', colSpan: 4 },
-    { name: 'Aug', colSpan: 4 },
-    { name: 'Sep', colSpan: 5 },
-    { name: 'Oct', colSpan: 4 },
-    { name: 'Nov', colSpan: 4 },
-    { name: 'Dec', colSpan: 5 },
-    { name: 'Jan', colSpan: 4 },
-    { name: 'Feb', colSpan: 4 },
-    { name: 'Mar', colSpan: 5 },
-    { name: 'Apr', colSpan: 4 },
-    { name: 'May', colSpan: 4 },
-    { name: 'Jun', colSpan: 4 },
-  ];
+  // Generates month labels dynamically based on layout week count
+  const getDynamicMonthLabels = (numWeeks: number) => {
+    const labels: { name: string; colSpan: number }[] = [];
+    let currentMonthName = '';
+    let currentSpan = 0;
+
+    for (let w = 53 - numWeeks; w < 53; w++) {
+      const date = new Date();
+      date.setDate(date.getDate() - (53 - w) * 7 + 3);
+      const monthName = date.toLocaleDateString('en-US', { month: 'short' });
+
+      if (monthName !== currentMonthName) {
+        if (currentSpan > 0) {
+          labels.push({ name: currentMonthName, colSpan: currentSpan });
+        }
+        currentMonthName = monthName;
+        currentSpan = 1;
+      } else {
+        currentSpan++;
+      }
+    }
+    if (currentSpan > 0) {
+      labels.push({ name: currentMonthName, colSpan: currentSpan });
+    }
+    return labels;
+  };
+
+  const desktopMonthLabels = getDynamicMonthLabels(53);
+  const mobileMonthLabels = getDynamicMonthLabels(21);
 
   return (
     <section id="contributions" className="py-24 relative overflow-hidden line-grid dot-grid">
@@ -93,11 +107,12 @@ const GithubContributions = () => {
 
               {/* Contribution Grid Container */}
               <div className="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent">
-                <div className="min-w-[670px] flex flex-col">
-                  
+                
+                {/* Desktop/Tablet Grid (Full 53 weeks) */}
+                <div className="hidden sm:flex min-w-[670px] flex-col">
                   {/* Month Headers */}
                   <div className="flex text-[10px] font-mono text-muted-foreground mb-2 pl-7 select-none">
-                    {monthLabels.map((month, idx) => (
+                    {desktopMonthLabels.map((month, idx) => (
                       <div 
                         key={idx} 
                         style={{ width: `${(month.colSpan / 53) * 100}%` }} 
@@ -136,7 +151,7 @@ const GithubContributions = () => {
 
                           return (
                             <div
-                              key={`${weekIdx}-${dayIdx}`}
+                              key={`desktop-${weekIdx}-${dayIdx}`}
                               style={bgStyle}
                               title={getTooltipText(weekIdx, dayIdx, level)}
                               className={`w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-[1.5px] border ${
@@ -148,8 +163,65 @@ const GithubContributions = () => {
                       )}
                     </div>
                   </div>
-
                 </div>
+
+                {/* Mobile Grid (Last 21 weeks / ~5 months) */}
+                <div className="flex sm:hidden w-full flex-col min-w-[280px]">
+                  {/* Month Headers */}
+                  <div className="flex text-[10px] font-mono text-muted-foreground mb-2 pl-7 select-none">
+                    {mobileMonthLabels.map((month, idx) => (
+                      <div 
+                        key={idx} 
+                        style={{ width: `${(month.colSpan / 21) * 100}%` }} 
+                        className="text-left"
+                      >
+                        {month.name}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Grid + Day Labels */}
+                  <div className="flex gap-2 items-center">
+                    {/* Day Labels */}
+                    <div className="flex flex-col justify-between text-[8px] font-mono text-muted-foreground h-[92px] select-none pr-1">
+                      <span>Mon</span>
+                      <span>Wed</span>
+                      <span>Fri</span>
+                    </div>
+
+                    {/* 21 Column Grid */}
+                    <div className="flex-1 grid grid-flow-col grid-cols-[repeat(21,minmax(0,1fr))] grid-rows-7 gap-[3px] select-none">
+                      {gridData && gridData.slice(-21).map((week, weekIdx) =>
+                        week.map((level, dayIdx) => {
+                          let bgStyle = {};
+                          if (level === 0) {
+                            bgStyle = { backgroundColor: 'rgba(255, 255, 255, 0.03)' };
+                          } else if (level === 1) {
+                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.15)' };
+                          } else if (level === 2) {
+                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.35)' };
+                          } else if (level === 3) {
+                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.65)' };
+                          } else if (level === 4) {
+                            bgStyle = { backgroundColor: 'hsl(var(--accent))' };
+                          }
+
+                          const originalWeekIdx = 32 + weekIdx;
+
+                          return (
+                            <div
+                              key={`mobile-${weekIdx}-${dayIdx}`}
+                              style={bgStyle}
+                              title={getTooltipText(originalWeekIdx, dayIdx, level)}
+                              className="w-[9px] h-[9px] rounded-[1.5px] border border-white/5 hover:scale-130 transition-transform duration-150 cursor-pointer"
+                            />
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 

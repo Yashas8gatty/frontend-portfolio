@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Github, ExternalLink, Globe, GitBranch, Code, ShieldAlert, Sparkles, Cpu } from 'lucide-react';
+import { Github, ExternalLink, Globe, GitBranch, Code, ShieldAlert, Cpu } from 'lucide-react';
 
 interface Project {
   title: string;

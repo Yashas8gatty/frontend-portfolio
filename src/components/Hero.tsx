@@ -99,7 +99,7 @@ Type 'github' to view code repositories.`
 OS: Canara Engineering College (B.E. AI & ML)
 Host: Yashas H Gatty (Front-End Intern @ Truck Hai)
 Kernel: React 18 / Vite / TS
-Uptime: 3rd Year Student
+Uptime: 4th Year Student
 Shell: React-Terminal-Shell
 IDE: Visual Studio Code
 Frame Rate: 60fps (Hardware Accel)
@@ -343,7 +343,7 @@ Memory: Active and learning new systems`
                 </div>
                 <div>
                   <h3 className="font-mono text-sm font-semibold text-foreground">Yashas H Gatty</h3>
-                  <p className="text-xs text-muted-foreground font-mono">Mangaluru, India - 3rd Year AI&ML</p>
+                  <p className="text-xs text-muted-foreground font-mono">Mangaluru, India - 4th Year AI&ML</p>
                 </div>
               </div>
               <div className="flex items-center gap-5 text-right font-mono text-xs hidden sm:flex text-muted-foreground">

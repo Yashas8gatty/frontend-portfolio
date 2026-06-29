@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
-import { Database, Layout, ShieldAlert, Cpu, Terminal, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Database, Layout, ShieldAlert, Cpu, Terminal, Brain, CheckCircle2 } from 'lucide-react';
 
 interface Skill {
   name: string;
@@ -56,7 +56,7 @@ const Skills = () => {
     {
       id: 'ai_ml_analytics',
       title: 'AI, ML & Analytics',
-      icon: Sparkles,
+      icon: Brain,
       skills: [
         { name: 'Scikit-Learn', level: 'Proficient', projects: ['EduCareer', 'Data Models'], details: 'Used for training classification algorithms, data standardization pipelines, and cluster analysis.', since: '2024' },
         { name: 'TensorFlow', level: 'Familiar', projects: ['Deep Learning'], details: 'Familiar with constructing basic artificial neural networks, deep layers, and model assessment.', since: '2024' },
@@ -173,7 +173,7 @@ const Skills = () => {
           {/* JSON Inspector Panel (Spans 6 cols) */}
           <div className="lg:col-span-6 flex flex-col">
             <div className="font-mono text-xs text-muted-foreground mb-2 flex items-center gap-1.5 px-1 select-none">
-              <Sparkles className="w-3.5 h-3.5 text-accent" />
+              <Terminal className="w-3.5 h-3.5 text-accent" />
               <span>METADATA_INSPECTOR - {selectedSkill.name.toLowerCase()}.json</span>
             </div>
 
