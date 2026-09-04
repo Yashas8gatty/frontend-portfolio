@@ -1,204 +1,285 @@
-import { Briefcase, Calendar, CheckCircle2, ShieldCheck, Terminal, Compass } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { Calendar, MapPin, Layers, ShieldCheck, Activity, Users, CheckCircle2, GitCommit } from 'lucide-react';
+import githubData from '../data/github-data.json';
 
 interface WorkExperience {
+  cycleId: string;
   title: string;
   company: string;
-  location?: string;
+  location: string;
   date: string;
-  status: 'ACTIVE' | 'COMPLETED';
-  description: string;
-  bullets?: string[];
+  status: 'ONGOING' | 'COMPLETED';
+  description: string[];
   skills: string[];
-  id: string;
+  mockupType: 'truckhai' | 'iad';
 }
 
 const Experience = () => {
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
-  };
-
   const experiences: WorkExperience[] = [
     {
-      id: 'exp_truckhai',
+      cycleId: 'CYCLE-01',
       title: 'Software Developer Intern',
       company: 'Truck Hai Technologies Pvt. Ltd.',
       location: 'Remote',
-      date: 'Feb 2026 – Present',
-      status: 'ACTIVE',
-      description: 'Developing production-ready web and mobile features using React, React Native (Expo), TypeScript, Tailwind CSS, and Vite from Figma designs, contributing to BFF/Assembly layers and managing collaborative Git workflows.',
-      bullets: [
+      date: 'Feb 2026 → Present',
+      status: 'ONGOING',
+      description: [
         'Developed production-ready web and mobile features using React, React Native (Expo), TypeScript, Tailwind CSS, and Vite from Figma designs.',
         'Integrated REST APIs and contributed to the BFF/Assembly layer, debugging authentication, API, mobile, and backend issues.',
-        'Managed Git/GitHub workflows, feature branches, pull requests, and code reviews while collaborating with frontend and backend teams.'
+        'Managed Git/GitHub workflows, feature branches, pull requests, and code reviews while collaborating with frontend and backend engineering teams.'
       ],
-      skills: ['React.js', 'React Native (Expo)', 'TypeScript', 'Tailwind CSS', 'Vite', 'BFF / Assembly Layer', 'REST APIs', 'Git Workflows']
+      skills: ['React.js', 'React Native (Expo)', 'TypeScript', 'Tailwind CSS', 'Vite', 'BFF Assembly Layer', 'REST APIs', 'Git Workflows'],
+      mockupType: 'truckhai'
     },
     {
-      id: 'exp_iad',
+      cycleId: 'CYCLE-02',
       title: 'Software Developer Intern',
       company: 'Institute of Applied Dermatology (IAD)',
       location: 'Kasaragod, Kerala',
-      date: 'Aug 2026 – Sept 2026',
+      date: 'Aug 2026 → Sept 2026',
       status: 'COMPLETED',
-      description: 'Engineered a Hospital Costing and Billing Management System using React, TypeScript, Node.js, Express, and PostgreSQL for patient management, treatment costing, billing, and reporting.',
-      bullets: [
-        'Developed a Hospital Costing and Billing Management System using React, TypeScript, Node.js, Express, and PostgreSQL for patient management, treatment costing, billing, and reports.',
+      description: [
+        'Developed a Hospital Costing and Billing Management System using React, TypeScript, Node.js, Express, and PostgreSQL for patient management, treatment costing, billing, and reporting.',
         'Built RESTful APIs with JWT-based authentication and role-based access control, integrating frontend workflows with PostgreSQL for secure data persistence, validation, and audit logging.',
-        'Designed the system for deployment at IAD branches across India.'
+        'Designed the system for multi-branch deployment at IAD healthcare branches across India.'
       ],
-      skills: ['React.js', 'TypeScript', 'Node.js', 'Express.js', 'PostgreSQL', 'JWT Auth', 'RBAC', 'Audit Logging']
+      skills: ['React.js', 'TypeScript', 'Node.js', 'Express.js', 'PostgreSQL', 'JWT Auth', 'RBAC', 'Audit Logging'],
+      mockupType: 'iad'
     }
   ];
 
   return (
-    <section id="experience" className="py-24 relative overflow-hidden line-grid dot-grid">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="experience" className="py-16 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 space-y-12">
         
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary border border-white/5 text-xs font-mono text-muted-foreground mb-4">
-            <span>cat experience.json</span>
+        {/* Section Header (Flat White #F7F8F8) */}
+        <div className="border-b border-white/[0.06] pb-3 flex items-center justify-between">
+          <div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85] mb-0.5">ENGINEERING // EXPERIENCES</div>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#F7F8F8] font-sans">
+              Work Experience & Systems Built
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
-            Work <span className="gradient-text-accent">Experience</span>
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto font-mono">
-            // Tracking professional roles and industry work history
-          </p>
+          <div className="text-xs font-mono text-[#747A85] hidden sm:block">
+            CYCLES_INDEXED: 02
+          </div>
         </div>
 
-        {/* Timeline Grid */}
-        <div className="relative max-w-4xl mx-auto pl-6 sm:pl-8 border-l border-white/10 space-y-12">
+        {/* Editorial Cycles Stream */}
+        <div className="space-y-14">
           {experiences.map((exp) => (
-            <div key={exp.id} className="relative group">
-              {/* Timeline dot locator */}
-              <span className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-background border-2 border-primary flex items-center justify-center">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-              </span>
-
-              {/* Dev Window Experience Card */}
-              <Card onMouseMove={handleMouseMove} className="dev-window glow-card border-white/5 p-6 sm:p-8 rounded-xl transition-all duration-300 hover:border-accent/20">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4 mb-4 select-none">
-                  <div>
-                    <span className="font-mono text-[10px] text-primary">// {exp.id.toUpperCase()}</span>
-                    <h3 className="text-lg font-bold text-foreground font-mono mt-1 group-hover:text-accent transition-colors">
-                      {exp.title}
-                    </h3>
-                  </div>
-
-                  <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-xs border shrink-0 self-start sm:self-center ${
-                    exp.status === 'ACTIVE' 
-                      ? 'bg-primary/10 text-primary border-primary/20' 
-                      : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                  }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${exp.status === 'ACTIVE' ? 'bg-accent animate-pulse' : 'bg-emerald-400'}`} />
-                    <span>{exp.status === 'ACTIVE' ? 'ONGOING' : 'COMPLETED'}</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-mono text-muted-foreground mb-4">
-                  <span className="flex items-center gap-1 text-foreground font-medium">
-                    <Briefcase className="w-3.5 h-3.5 text-primary" />
-                    {exp.company}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {exp.date}
-                  </span>
-                  {exp.location && (
-                    <span className="flex items-center gap-1 text-accent/80">
-                      <Compass className="w-3.5 h-3.5" />
-                      {exp.location}
-                    </span>
-                  )}
-                </div>
-
-                {exp.bullets && exp.bullets.length > 0 ? (
-                  <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
-                    {exp.bullets.map((bullet, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-primary font-mono mt-0.5">•</span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
-                    {exp.description}
-                  </p>
-                )}
-
-                {/* Skills tags */}
-                <div className="space-y-3">
-                  <div className="text-[10px] font-mono font-semibold uppercase tracking-wider text-primary">// technologies_applied</div>
-                  <div className="flex flex-wrap gap-2">
-                    {exp.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-2.5 py-1 rounded-md border border-white/5 bg-secondary/30 font-mono text-[10px] text-slate-300 hover:border-accent/30 hover:text-accent transition-colors"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            </div>
-          ))}
-        </div>
-
-        {/* Continuous Learning styled as CLI console output */}
-        <div className="mt-20 max-w-4xl mx-auto">
-          <div onMouseMove={handleMouseMove} className="dev-window glow-card rounded-xl overflow-hidden border-white/5">
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-2.5 bg-secondary/50 border-b border-white/5 select-none font-mono text-[10px]">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-red-500/70" />
-                <div className="w-2 h-2 rounded-full bg-yellow-500/70" />
-                <div className="w-2 h-2 rounded-full bg-green-500/70" />
-              </div>
-              <span className="text-muted-foreground">sys_process - continuous_learning_log</span>
-              <Terminal className="w-3 h-3 text-primary" />
-            </div>
-
-            {/* Content */}
-            <div className="p-6 font-mono text-xs leading-relaxed space-y-4 text-muted-foreground bg-black/35 select-text">
-              <div className="flex items-center gap-2 text-primary">
-                <span>&gt;</span>
-                <span>systemctl status self_learning.service</span>
-              </div>
+            <div key={exp.cycleId} className="space-y-6">
               
-              <div className="pl-4 border-l border-white/5 space-y-2">
-                <div>● self_learning.service - Active Professional Development Engine</div>
-                <div className="text-emerald-400">   Active: active (running) since Fri 2021-09-01; 4y+ ago</div>
-                <div>   Main PID: 2026 (yashas-dev)</div>
-                <div>   Tasks: 4 (limit: 512)</div>
-                <div>   Memory: Continuous Stack Expansion</div>
+              {/* Cycle Editorial Header Bar */}
+              <div className="border-b border-white/[0.06] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-semibold text-[#747A85]">
+                    {exp.cycleId}
+                  </span>
+                  <span className="text-[#747A85]">•</span>
+                  <h3 className="font-sans font-semibold text-base sm:text-lg text-[#F7F8F8]">
+                    {exp.company}
+                  </h3>
+                  <span className="text-xs text-[#A7ADB8] font-medium hidden md:inline">({exp.title})</span>
+                </div>
+
+                <div className="flex items-center gap-3 self-start sm:self-center text-xs font-mono text-[#747A85]">
+                  <span>{exp.date}</span>
+                  <span>{exp.location}</span>
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                    exp.status === 'ONGOING' ? 'status-badge-ongoing' : 'status-badge-completed'
+                  }`}>
+                    {exp.status === 'ONGOING' ? '● ONGOING' : '✓ COMPLETED'}
+                  </span>
+                </div>
               </div>
 
-              <div className="pt-2">
-                <div>Active Threads running:</div>
-                <div className="grid sm:grid-cols-2 gap-2 mt-2">
-                  {[
-                    'Machine Learning Models & Training Pipelines',
-                    'Interactive Full-stack React Systems',
-                    'Database Schemas & Supabase Integrations',
-                    'Data Analysis & Visualizations'
-                  ].map((thread, idx) => (
-                    <div key={idx} className="flex items-center gap-2 pl-4 text-foreground/80">
-                      <span className="text-primary">&#9656;</span>
-                      <span>{thread}</span>
-                    </div>
+              {/* Text Description Subtext */}
+              <div className="space-y-3 font-sans text-xs text-[#A7ADB8]">
+                <ul className="space-y-1.5 leading-relaxed max-w-4xl">
+                  {exp.description.map((bullet, bIdx) => (
+                    <li key={bIdx} className="flex items-start gap-2">
+                      <span className="text-[#747A85] mt-0.5">•</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex flex-wrap gap-1.5 font-mono text-[11px] pt-1">
+                  {exp.skills.map((skill) => (
+                    <span key={skill} className="px-2 py-0.5 rounded bg-[#101113] border border-white/[0.06] text-[#F7F8F8]">
+                      {skill}
+                    </span>
                   ))}
                 </div>
               </div>
+
+              {/* DOMINANT SOFTWARE PRODUCT VISUALIZATION */}
+              <div className="pt-2">
+                {exp.mockupType === 'truckhai' ? (
+                  /* Truck Hai Rich Logistics Application UI Mockup */
+                  <div className="linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] overflow-hidden font-sans text-xs">
+                    
+                    {/* Top App Console Header */}
+                    <div className="flex items-center justify-between px-4 py-2.5 bg-[#101113] border-b border-white/[0.06]">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#E5484D]/60" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#F2A93B]/60" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#26B56B]/60" />
+                        </div>
+                        <span className="font-mono text-xs font-medium text-[#F7F8F8]">Truck Hai Logistics System</span>
+                      </div>
+                      <div className="flex items-center gap-3 font-mono text-[11px]">
+                        <span className="text-[#26B56B] flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#26B56B]" /> API Operational</span>
+                        <span className="text-[#A7ADB8] hidden sm:inline">PostgreSQL Connected</span>
+                      </div>
+                    </div>
+
+                    {/* App Internal Dashboard Grid */}
+                    <div className="grid md:grid-cols-12 min-h-[260px]">
+                      
+                      {/* Left Sidebar */}
+                      <div className="md:col-span-3 bg-[#0C0D0F] border-r border-white/[0.06] p-3 space-y-3 font-sans text-[11px] hidden md:block select-none">
+                        <div className="text-[10px] font-mono text-[#747A85] uppercase">NAVIGATION</div>
+                        <div className="space-y-1">
+                          <div className="px-2 py-1 rounded bg-[#181A1D] text-[#F7F8F8] font-medium">Active Rides</div>
+                          <div className="px-2 py-1 text-[#747A85] hover:text-[#A7ADB8]">Fleet Status</div>
+                          <div className="px-2 py-1 text-[#747A85] hover:text-[#A7ADB8]">Driver Audits</div>
+                          <div className="px-2 py-1 text-[#747A85] hover:text-[#A7ADB8]">BFF Logs</div>
+                        </div>
+                      </div>
+
+                      {/* Main Console Content */}
+                      <div className="md:col-span-9 p-4 space-y-3 bg-[#08090A]">
+                        <div className="flex items-center justify-between font-mono text-[10px] text-[#747A85] uppercase border-b border-white/[0.04] pb-1.5">
+                          <span>ACTIVE SHIPMENTS & RIDES</span>
+                          <span>REAL-TIME DISPATCH</span>
+                        </div>
+
+                        {/* Shipment Records Table */}
+                        <div className="space-y-1.5 font-sans">
+                          {[
+                            { id: 'TRK-204', route: 'Mangalore → Bangalore', status: 'IN TRANSIT', driver: 'Vehicle #KA-19-E-4012', speed: '64 km/h' },
+                            { id: 'TRK-205', route: 'Udupi → Mysore', status: 'DELIVERED', driver: 'Vehicle #KA-20-M-9102', speed: '0 km/h' },
+                            { id: 'TRK-206', route: 'Kasaragod → Mangalore', status: 'IN TRANSIT', driver: 'Vehicle #KL-14-A-3381', speed: '58 km/h' },
+                          ].map((shipment) => (
+                            <div key={shipment.id} className="flex items-center justify-between p-2.5 rounded bg-[#101113] border border-white/[0.04] text-xs">
+                              <div className="flex items-center gap-3">
+                                <span className="font-mono text-[11px] text-[#747A85] font-semibold">{shipment.id}</span>
+                                <div>
+                                  <div className="text-[#F7F8F8] font-medium">{shipment.route}</div>
+                                  <div className="text-[10px] font-mono text-[#747A85]">{shipment.driver}</div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-3">
+                                <span className="text-[10px] font-mono text-[#747A85] hidden sm:inline">{shipment.speed}</span>
+                                <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                                  shipment.status === 'IN TRANSIT' ? 'status-badge-ongoing' : 'status-badge-completed'
+                                }`}>
+                                  {shipment.status}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Bottom Activity Stream */}
+                        <div className="pt-2 border-t border-white/[0.04] flex items-center justify-between text-[10px] font-mono text-[#747A85] gap-2 truncate">
+                          <span className="truncate flex items-center gap-1.5">
+                            <GitCommit className="w-3 h-3 text-[#26B56B] shrink-0" />
+                            <span><strong className="text-[#A7ADB8] font-normal">{githubData.commits[1]?.repo}</strong>: {githubData.commits[1]?.message}</span>
+                          </span>
+                          <span className="shrink-0">{githubData.commits[1]?.date}</span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                ) : (
+                  /* IAD Hospital Billing Application UI Mockup */
+                  <div className="linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] overflow-hidden font-sans text-xs">
+                    
+                    {/* Top App Console Header */}
+                    <div className="flex items-center justify-between px-4 py-2.5 bg-[#101113] border-b border-white/[0.06]">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#E5484D]/60" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#F2A93B]/60" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-[#26B56B]/60" />
+                        </div>
+                        <span className="font-mono text-xs font-medium text-[#F7F8F8]">IAD Hospital Costing & Billing System</span>
+                      </div>
+                      <div className="flex items-center gap-2 font-mono text-[11px]">
+                        <span className="px-2 py-0.5 rounded bg-white/[0.04] text-[#A7ADB8] border border-white/[0.04]">BRANCH: Kasaragod Main</span>
+                      </div>
+                    </div>
+
+                    {/* App Internal Dashboard Grid */}
+                    <div className="grid md:grid-cols-12 min-h-[260px]">
+                      
+                      {/* Left Sidebar */}
+                      <div className="md:col-span-3 bg-[#0C0D0F] border-r border-white/[0.06] p-3 space-y-3 font-sans text-[11px] hidden md:block select-none">
+                        <div className="text-[10px] font-mono text-[#747A85] uppercase">PATIENT RECORDS</div>
+                        <div className="space-y-1">
+                          <div className="px-2 py-1 rounded bg-[#181A1D] text-[#F7F8F8] font-medium">Billing Dispatches</div>
+                          <div className="px-2 py-1 text-[#747A85] hover:text-[#A7ADB8]">Treatment Costing</div>
+                          <div className="px-2 py-1 text-[#747A85] hover:text-[#A7ADB8]">PostgreSQL Audit Log</div>
+                          <div className="px-2 py-1 text-[#747A85] hover:text-[#A7ADB8]">RBAC Roles</div>
+                        </div>
+                      </div>
+
+                      {/* Main Console Content */}
+                      <div className="md:col-span-9 p-4 space-y-3 bg-[#08090A]">
+                        <div className="flex items-center justify-between font-mono text-[10px] text-[#747A85] uppercase border-b border-white/[0.04] pb-1.5">
+                          <span>RECENT TREATMENT BILLING DISPATCHES</span>
+                          <span>POSTGRESQL PERSISTENCE</span>
+                        </div>
+
+                        {/* Patients Billing Records Table */}
+                        <div className="space-y-1.5 font-sans">
+                          {[
+                            { inv: 'INV-8821', record: 'Clinical Therapy Package #401', amount: '₹14,500', status: 'AUDITED & PAID', date: 'Aug 31' },
+                            { inv: 'INV-8822', record: 'Dermatology Consultation & Meds', amount: '₹8,200', status: 'AUDITED & PAID', date: 'Aug 30' },
+                            { inv: 'INV-8823', record: 'Inpatient Costing Statement', amount: '₹22,000', status: 'PROCESSING', date: 'Aug 30' },
+                          ].map((bill) => (
+                            <div key={bill.inv} className="flex items-center justify-between p-2.5 rounded bg-[#101113] border border-white/[0.04] text-xs">
+                              <div className="flex items-center gap-3">
+                                <span className="font-mono text-[11px] text-[#26B56B] font-semibold">{bill.inv}</span>
+                                <div>
+                                  <div className="text-[#F7F8F8] font-medium">{bill.record}</div>
+                                  <div className="text-[10px] font-mono text-[#747A85]">Timestamp: {bill.date}</div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-3">
+                                <span className="font-mono text-xs text-[#F7F8F8]">{bill.amount}</span>
+                                <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+                                  bill.status === 'AUDITED & PAID' ? 'status-badge-completed' : 'status-badge-ongoing'
+                                }`}>
+                                  {bill.status}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Bottom Audit Stream */}
+                        <div className="pt-2 border-t border-white/[0.04] flex items-center justify-between text-[10px] font-mono text-[#747A85]">
+                          <span>Audit: JWT Auth verified role ADMIN_BRANCH_01</span>
+                          <span>RBAC Active</span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                )}
+              </div>
+
             </div>
-          </div>
+          ))}
         </div>
 
       </div>

@@ -1,412 +1,168 @@
 import React from 'react';
-import { Github, Users, FolderGit, Star, Flame, Trophy, Calendar } from 'lucide-react';
+import { GitBranch, Activity, CheckCircle2, GitCommit, Code2 } from 'lucide-react';
 import githubData from '../data/github-data.json';
 
 const GithubContributions = () => {
-  // Mouse spotlight border glow effect
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  const { stats, insights, languages, commits, grid } = githubData;
+
+  const getIntensityClass = (count: number) => {
+    if (count === 0) return 'bg-[#101113] border border-white/[0.04]';
+    if (count === 1) return 'bg-[#26B56B]/30 border border-[#26B56B]/40';
+    if (count === 2) return 'bg-[#26B56B]/50 border border-[#26B56B]/60';
+    if (count === 3) return 'bg-[#26B56B]/75 border border-[#26B56B]/80';
+    return 'bg-[#26B56B] border border-[#26B56B]';
   };
-
-  const { stats, insights, languages, commits, grid: gridData } = githubData;
-  const { followers, repositories, stars, totalContributions, avatarUrl } = stats;
-  const { currentStreak, longestStreak, busyDay } = insights;
-
-  // Generates cell description tooltips
-  const getTooltipText = (weekIdx: number, dayIdx: number, level: number) => {
-    const date = new Date();
-    date.setDate(date.getDate() - (53 - weekIdx) * 7 + dayIdx);
-    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    const count = level === 0 ? 'No' : level === 1 ? '1-2' : level === 2 ? '3-4' : level === 3 ? '5-7' : '8+';
-    return `${count} contributions on ${dateStr}`;
-  };
-
-  // Generates month labels dynamically based on layout week count
-  const getDynamicMonthLabels = (numWeeks: number) => {
-    const labels: { name: string; colSpan: number }[] = [];
-    let currentMonthName = '';
-    let currentSpan = 0;
-
-    for (let w = 53 - numWeeks; w < 53; w++) {
-      const date = new Date();
-      date.setDate(date.getDate() - (53 - w) * 7 + 3);
-      const monthName = date.toLocaleDateString('en-US', { month: 'short' });
-
-      if (monthName !== currentMonthName) {
-        if (currentSpan > 0) {
-          labels.push({ name: currentMonthName, colSpan: currentSpan });
-        }
-        currentMonthName = monthName;
-        currentSpan = 1;
-      } else {
-        currentSpan++;
-      }
-    }
-    if (currentSpan > 0) {
-      labels.push({ name: currentMonthName, colSpan: currentSpan });
-    }
-    return labels;
-  };
-
-  const desktopMonthLabels = getDynamicMonthLabels(53);
-  const mobileMonthLabels = getDynamicMonthLabels(21);
 
   return (
-    <section id="contributions" className="py-24 relative overflow-hidden line-grid dot-grid">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="contributions" className="py-16 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 space-y-10">
         
         {/* Section Header */}
-        <div className="mb-16">
-          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary border border-white/5 text-xs font-mono text-muted-foreground mb-4">
-            <span>git log --author=yashas</span>
+        <div className="border-b border-white/[0.06] pb-3 flex items-center justify-between">
+          <div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85] mb-0.5">GITHUB // ACTIVITY STREAM</div>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#F7F8F8] font-sans">
+              Engineering Activity & Contributions
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4 flex items-center gap-3">
-            Code & <span className="gradient-text-accent">Contributions</span>
-          </h2>
-          <div className="w-20 h-1 bg-accent rounded-full mt-2" />
+          <div className="text-xs font-mono text-[#747A85] hidden sm:block">
+            {stats.totalContributions} CONTRIBUTIONS IN PAST YEAR
+          </div>
         </div>
 
-        {/* Main Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-6xl mx-auto items-stretch">
+        {/* GitHub Stats Cards & Contribution Heatmap */}
+        <div className="space-y-6">
           
-          {/* GitHub Activity Card */}
-          <div 
-            className="lg:col-span-3 dev-window glow-card rounded-xl p-6 flex flex-col justify-between border-white/5 relative"
-            onMouseMove={handleMouseMove}
-          >
-            <div>
-              {/* Card Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4 mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/5 bg-black/40 flex items-center justify-center">
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt="GitHub Avatar" className="w-full h-full object-cover" />
-                    ) : (
-                      <Github className="w-5 h-5 text-accent" />
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="font-mono text-sm font-semibold text-foreground tracking-wider">@yashas8gatty</h3>
-                    <p className="text-xs text-muted-foreground">Contribution activity on GitHub</p>
-                  </div>
-                </div>
-                
-                <div className="text-left sm:text-right">
-                  <span className="text-3xl font-mono font-bold text-accent">
-                    {totalContributions.toLocaleString()}
-                  </span>
-                  <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider mt-0.5">
-                    contributions in the last year
-                  </p>
-                </div>
-              </div>
+          {/* Metrics Summary Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
+            <div className="p-3 rounded-lg bg-[#0C0D0F] border border-white/[0.06] space-y-1">
+              <div className="text-[10px] text-[#747A85]">YEAR CONTRIBUTIONS</div>
+              <div className="text-lg font-bold text-[#F7F8F8]">{stats.totalContributions}</div>
+            </div>
 
-              {/* Contribution Grid Container */}
-              <div className="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-white/5 scrollbar-track-transparent">
-                
-                {/* Desktop/Tablet Grid (Full 53 weeks) */}
-                <div className="hidden sm:flex min-w-[670px] flex-col">
-                  {/* Month Headers */}
-                  <div className="flex text-[10px] font-mono text-muted-foreground mb-2 pl-7 select-none">
-                    {desktopMonthLabels.map((month, idx) => (
-                      <div 
-                        key={idx} 
-                        style={{ width: `${(month.colSpan / 53) * 100}%` }} 
-                        className="text-left"
-                      >
-                        {month.name}
-                      </div>
+            <div className="p-3 rounded-lg bg-[#0C0D0F] border border-white/[0.06] space-y-1">
+              <div className="text-[10px] text-[#747A85]">REPOSITORIES</div>
+              <div className="text-lg font-bold text-[#F7F8F8]">{stats.repositories}</div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-[#0C0D0F] border border-white/[0.06] space-y-1">
+              <div className="text-[10px] text-[#747A85]">LONGEST STREAK</div>
+              <div className="text-lg font-bold text-[#F7F8F8]">{insights.longestStreak} Days</div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-[#0C0D0F] border border-white/[0.06] space-y-1">
+              <div className="text-[10px] text-[#747A85]">PEAK DAY</div>
+              <div className="text-lg font-bold text-[#26B56B]">{insights.busyDay}</div>
+            </div>
+          </div>
+
+          {/* 52-Week Contribution Grid Panel */}
+          <div className="linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-4 space-y-3 font-sans">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 text-xs">
+              <span className="font-mono text-[#F7F8F8] flex items-center gap-1.5">
+                <Activity className="w-3.5 h-3.5 text-[#26B56B]" />
+                <span>52-Week Contribution Graph</span>
+              </span>
+              <span className="font-mono text-[10px] text-[#747A85]">
+                Updated Daily via GitHub API
+              </span>
+            </div>
+
+            {/* Heatmap Grid Wrapper */}
+            <div className="overflow-x-auto pb-2">
+              <div className="inline-flex gap-1 min-w-max">
+                {grid.map((week, weekIdx) => (
+                  <div key={weekIdx} className="flex flex-col gap-1">
+                    {week.map((count, dayIdx) => (
+                      <div
+                        key={dayIdx}
+                        title={`Week ${weekIdx + 1}, Day ${dayIdx + 1}: ${count} contributions`}
+                        className={`w-2.5 h-2.5 rounded-[2px] ${getIntensityClass(count)}`}
+                      />
                     ))}
                   </div>
-
-                  {/* Grid + Day Labels */}
-                  <div className="flex gap-2 items-center">
-                    {/* Day Labels */}
-                    <div className="flex flex-col justify-between text-[8px] font-mono text-muted-foreground h-[92px] select-none pr-1">
-                      <span>Mon</span>
-                      <span>Wed</span>
-                      <span>Fri</span>
-                    </div>
-
-                    {/* 53 Column Grid */}
-                    <div className="flex-1 grid grid-flow-col grid-cols-[repeat(53,minmax(0,1fr))] grid-rows-7 gap-[3px] select-none">
-                      {gridData && gridData.map((week, weekIdx) =>
-                        week.map((level, dayIdx) => {
-                          let bgStyle = {};
-                          if (level === 0) {
-                            bgStyle = { backgroundColor: 'rgba(255, 255, 255, 0.03)' };
-                          } else if (level === 1) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.15)' };
-                          } else if (level === 2) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.35)' };
-                          } else if (level === 3) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.65)' };
-                          } else if (level === 4) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent))' };
-                          }
-
-                          return (
-                            <div
-                              key={`desktop-${weekIdx}-${dayIdx}`}
-                              style={bgStyle}
-                              title={getTooltipText(weekIdx, dayIdx, level)}
-                              className={`w-[9px] h-[9px] sm:w-[10px] sm:h-[10px] rounded-[1.5px] border ${
-                                level === 0 ? 'border-white/5' : 'border-transparent'
-                              } hover:scale-130 transition-transform duration-150 cursor-pointer`}
-                            />
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mobile Grid (Last 21 weeks / ~5 months) */}
-                <div className="flex sm:hidden w-full flex-col min-w-[280px]">
-                  {/* Month Headers */}
-                  <div className="flex text-[10px] font-mono text-muted-foreground mb-2 pl-7 select-none">
-                    {mobileMonthLabels.map((month, idx) => (
-                      <div 
-                        key={idx} 
-                        style={{ width: `${(month.colSpan / 21) * 100}%` }} 
-                        className="text-left"
-                      >
-                        {month.name}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Grid + Day Labels */}
-                  <div className="flex gap-2 items-center">
-                    {/* Day Labels */}
-                    <div className="flex flex-col justify-between text-[8px] font-mono text-muted-foreground h-[92px] select-none pr-1">
-                      <span>Mon</span>
-                      <span>Wed</span>
-                      <span>Fri</span>
-                    </div>
-
-                    {/* 21 Column Grid */}
-                    <div className="flex-1 grid grid-flow-col grid-cols-[repeat(21,minmax(0,1fr))] grid-rows-7 gap-[3px] select-none">
-                      {gridData && gridData.slice(-21).map((week, weekIdx) =>
-                        week.map((level, dayIdx) => {
-                          let bgStyle = {};
-                          if (level === 0) {
-                            bgStyle = { backgroundColor: 'rgba(255, 255, 255, 0.03)' };
-                          } else if (level === 1) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.15)' };
-                          } else if (level === 2) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.35)' };
-                          } else if (level === 3) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent) / 0.65)' };
-                          } else if (level === 4) {
-                            bgStyle = { backgroundColor: 'hsl(var(--accent))' };
-                          }
-
-                          const originalWeekIdx = 32 + weekIdx;
-
-                          return (
-                            <div
-                              key={`mobile-${weekIdx}-${dayIdx}`}
-                              style={bgStyle}
-                              title={getTooltipText(originalWeekIdx, dayIdx, level)}
-                              className="w-[9px] h-[9px] rounded-[1.5px] border border-white/5 hover:scale-130 transition-transform duration-150 cursor-pointer"
-                            />
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
-                </div>
-
+                ))}
               </div>
             </div>
 
-            {/* Commit Streaks & Insights Dashboard */}
-            <div className="grid grid-cols-3 gap-4 border-t border-b border-white/5 py-4 my-6 font-mono">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/15 flex items-center justify-center text-orange-400 shrink-0">
-                  <Flame className="w-4 h-4 fill-orange-400/20" />
-                </div>
-                <div>
-                  <div className="text-xs text-muted-foreground">Current Streak</div>
-                  <div className="text-sm font-bold text-foreground mt-0.5">{currentStreak} days</div>
-                </div>
+            {/* Grid Legend */}
+            <div className="flex items-center justify-between pt-1 border-t border-white/[0.04] text-[10px] font-mono text-[#747A85]">
+              <span>Less</span>
+              <div className="flex items-center gap-1">
+                <div className="w-2.5 h-2.5 rounded-[2px] bg-[#101113] border border-white/[0.04]" />
+                <div className="w-2.5 h-2.5 rounded-[2px] bg-[#26B56B]/30 border border-[#26B56B]/40" />
+                <div className="w-2.5 h-2.5 rounded-[2px] bg-[#26B56B]/50 border border-[#26B56B]/60" />
+                <div className="w-2.5 h-2.5 rounded-[2px] bg-[#26B56B]/75 border border-[#26B56B]/80" />
+                <div className="w-2.5 h-2.5 rounded-[2px] bg-[#26B56B] border border-[#26B56B]" />
               </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-yellow-500/10 border border-yellow-500/15 flex items-center justify-center text-yellow-400 shrink-0">
-                  <Trophy className="w-4 h-4 fill-yellow-500/20" />
-                </div>
-                <div>
-                  <div className="text-xs text-muted-foreground">Longest Streak</div>
-                  <div className="text-sm font-bold text-foreground mt-0.5">{longestStreak} days</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/15 flex items-center justify-center text-cyan-400 shrink-0">
-                  <Calendar className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs text-muted-foreground">Most Active Day</div>
-                  <div className="text-sm font-bold text-foreground mt-0.5">{busyDay}</div>
-                </div>
-              </div>
+              <span>More</span>
             </div>
+          </div>
 
-            {/* Language Distribution Bar */}
-            <div className="space-y-3 font-mono">
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">// repo_language_distribution</div>
-              
-              {/* Stacked Bar */}
-              <div className="w-full h-2 rounded-full overflow-hidden flex bg-white/5">
-                {languages.map((lang, idx) => (
-                  <div 
-                    key={idx}
-                    style={{ 
-                      width: `${lang.percentage}%`,
-                      backgroundColor: lang.color 
-                    }}
+          {/* Languages Distribution Bar & Live Commits Stream Grid */}
+          <div className="grid lg:grid-cols-12 gap-6 items-start">
+            
+            {/* Language Distribution Breakdown (5 cols) */}
+            <div className="lg:col-span-5 linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-4 space-y-3 font-sans text-xs">
+              <div className="border-b border-white/[0.06] pb-2 font-mono text-[#F7F8F8] flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Code2 className="w-3.5 h-3.5 text-[#747A85]" />
+                  <span>Language Distribution</span>
+                </span>
+                <span className="text-[10px] text-[#747A85]">CODEBASE RATIO</span>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="w-full h-2 rounded bg-[#101113] flex overflow-hidden border border-white/[0.04]">
+                {languages.map(lang => (
+                  <div
+                    key={lang.name}
+                    style={{ width: `${lang.percentage}%`, backgroundColor: lang.color }}
                     title={`${lang.name}: ${lang.percentage}%`}
-                    className="h-full first:rounded-l-full last:rounded-r-full transition-all duration-300"
                   />
                 ))}
               </div>
 
-              {/* Legends list */}
-              <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-[9px] text-muted-foreground">
-                {languages.map((lang, idx) => (
-                  <div key={idx} className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: lang.color }} />
-                    <span className="text-foreground font-semibold">{lang.name}</span>
-                    <span>{lang.percentage}%</span>
+              <div className="space-y-1.5 font-mono text-[11px]">
+                {languages.map(lang => (
+                  <div key={lang.name} className="flex items-center justify-between text-[#A7ADB8]">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: lang.color }} />
+                      <span>{lang.name}</span>
+                    </div>
+                    <span className="text-[#F7F8F8] font-semibold">{lang.percentage}%</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Card Footer */}
-            <div className="mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-center justify-between font-mono text-[10px] text-slate-400">
-              <span>{totalContributions} contributions in the last year</span>
-              
-              {/* Legend */}
-              <div className="flex items-center gap-1.5 select-none">
-                <span>Less</span>
-                <div className="w-[10px] h-[10px] rounded-[1.5px] border border-white/5" style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }} />
-                <div className="w-[10px] h-[10px] rounded-[1.5px]" style={{ backgroundColor: 'hsl(var(--accent) / 0.15)' }} />
-                <div className="w-[10px] h-[10px] rounded-[1.5px]" style={{ backgroundColor: 'hsl(var(--accent) / 0.35)' }} />
-                <div className="w-[10px] h-[10px] rounded-[1.5px]" style={{ backgroundColor: 'hsl(var(--accent) / 0.65)' }} />
-                <div className="w-[10px] h-[10px] rounded-[1.5px]" style={{ backgroundColor: 'hsl(var(--accent))' }} />
-                <span>More</span>
+            {/* Live Commit Activity Stream (7 cols) */}
+            <div className="lg:col-span-7 linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-4 space-y-3 font-sans text-xs">
+              <div className="border-b border-white/[0.06] pb-2 font-mono text-[#F7F8F8] flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <GitCommit className="w-3.5 h-3.5 text-[#26B56B]" />
+                  <span>Recent GitHub Commits</span>
+                </span>
+                <span className="text-[10px] text-[#26B56B]">LIVE STREAM</span>
               </div>
-            </div>
 
-          </div>
-
-          {/* Metric Sidebar */}
-          <div className="flex flex-col gap-4 lg:col-span-1 h-full justify-between">
-            
-            {/* Followers Card */}
-            <div 
-              className="flex-1 dev-window glow-card rounded-xl p-6 flex flex-col justify-between border-white/5 relative overflow-hidden group min-h-[110px]"
-              onMouseMove={handleMouseMove}
-            >
-              <div className="w-24 h-24 bg-rose-500/5 rounded-full blur-xl absolute -top-8 -right-8 pointer-events-none group-hover:bg-rose-500/10 transition-all duration-500" />
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-3xl font-mono font-bold text-rose-400">{followers}</div>
-                  <div className="text-xs font-mono text-muted-foreground mt-1">Followers</div>
-                </div>
-                <div className="p-2 bg-rose-500/10 rounded-lg text-rose-400 border border-rose-500/10">
-                  <Users className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-
-            {/* Repositories Card */}
-            <div 
-              className="flex-1 dev-window glow-card rounded-xl p-6 flex flex-col justify-between border-white/5 relative overflow-hidden group min-h-[110px]"
-              onMouseMove={handleMouseMove}
-            >
-              <div className="w-24 h-24 bg-cyan-500/5 rounded-full blur-xl absolute -top-8 -right-8 pointer-events-none group-hover:bg-cyan-500/10 transition-all duration-500" />
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-3xl font-mono font-bold text-cyan-400">{repositories}</div>
-                  <div className="text-xs font-mono text-muted-foreground mt-1">Repositories</div>
-                </div>
-                <div className="p-2 bg-cyan-500/10 rounded-lg text-cyan-400 border border-cyan-500/10">
-                  <FolderGit className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-
-            {/* Stars Card */}
-            <div 
-              className="flex-1 dev-window glow-card rounded-xl p-6 flex flex-col justify-between border-white/5 relative overflow-hidden group min-h-[110px]"
-              onMouseMove={handleMouseMove}
-            >
-              <div className="w-24 h-24 bg-amber-500/5 rounded-full blur-xl absolute -top-8 -right-8 pointer-events-none group-hover:bg-amber-500/10 transition-all duration-500" />
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-3xl font-mono font-bold text-amber-400">{stars}</div>
-                  <div className="text-xs font-mono text-muted-foreground mt-1">GitHub Stars</div>
-                </div>
-                <div className="p-2 bg-amber-500/10 rounded-lg text-amber-400 border border-amber-500/10">
-                  <Star className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* Recent Commits Feed (CLI Terminal style) */}
-        <div className="max-w-6xl mx-auto mt-6">
-          <div 
-            className="dev-window glow-card rounded-xl p-6 border-white/5 relative overflow-hidden"
-            onMouseMove={handleMouseMove}
-          >
-            {/* Terminal Header */}
-            <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4 select-none">
-              <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-                <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-                <span className="ml-2">bash - yashas@terminal: ~/github-recent-commits</span>
-              </div>
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/30 text-emerald-400 font-mono text-[9px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>LIVE_FEED</span>
-              </div>
-            </div>
-            
-            {/* Terminal Body */}
-            <div className="font-mono text-xs space-y-2.5 max-h-[220px] overflow-y-auto pr-2 scrollbar-thin">
-              {commits && commits.map((commit, idx) => (
-                <div 
-                  key={idx} 
-                  className="flex flex-col sm:flex-row sm:items-stretch justify-between gap-1.5 text-slate-300 hover:text-white transition-colors duration-200 py-1.5 border-b border-white/[0.02] min-w-0"
-                >
-                  <div className="flex items-start gap-2 min-w-0 w-full sm:w-auto">
-                    <span className="text-accent shrink-0 font-bold font-sans mt-0.5">➜</span>
-                    <span className="text-primary shrink-0 font-semibold truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[180px]" title={commit.repo}>
-                      [{commit.repo}]
-                    </span>
-                    <span className="text-muted-foreground font-semibold shrink-0 mt-0.5">{commit.sha}</span>
-                    <span className="text-slate-200 flex-1 break-words whitespace-normal sm:truncate sm:min-w-0" title={commit.message}>
-                      {commit.message}
-                    </span>
+              <div className="space-y-2 font-mono text-[11px]">
+                {commits.slice(0, 5).map((commit, i) => (
+                  <div key={i} className="p-2 rounded bg-[#101113] border border-white/[0.04] flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 truncate">
+                      <span className="text-[#747A85] text-[10px] font-bold">{commit.sha}</span>
+                      <span className="text-[#A7ADB8] truncate">{commit.message}</span>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <span className="text-[10px] text-[#747A85]">{commit.repo}</span>
+                    </div>
                   </div>
-                  <div className="text-[10px] text-muted-foreground shrink-0 pl-6 sm:pl-0 mt-0.5 sm:mt-0 sm:self-center">{commit.date}</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
+
           </div>
+
         </div>
 
       </div>

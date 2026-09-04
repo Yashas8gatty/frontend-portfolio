@@ -1,79 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Menu, X, Terminal, ArrowUpRight, Palette } from 'lucide-react';
+import { Menu, X, Search, ArrowUpRight, Volume2, VolumeX } from 'lucide-react';
+import { sound } from '../utils/sound';
 
 const Navigation = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<'cyan' | 'red' | 'yellow' | 'green'>('red');
-  const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0, opacity: 0 });
-
-  useEffect(() => {
-    const updateSlider = () => {
-      const activeButton = document.getElementById(`nav-btn-${activeSection}`);
-      if (activeButton) {
-        setSliderStyle({
-          left: activeButton.offsetLeft,
-          width: activeButton.clientWidth,
-          opacity: 1,
-        });
-      } else {
-        setSliderStyle(prev => ({ ...prev, opacity: 0 }));
-      }
-    };
-
-    updateSlider();
-
-    if (document.fonts) {
-      document.fonts.ready.then(updateSlider);
-    }
-
-    window.addEventListener('resize', updateSlider);
-    return () => window.removeEventListener('resize', updateSlider);
-  }, [activeSection]);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('portfolio-theme') as 'cyan' | 'red' | 'yellow' | 'green';
-    if (savedTheme) {
-      setTheme(savedTheme);
-      applyTheme(savedTheme);
-    } else {
-      setTheme('red');
-      applyTheme('red');
-    }
-  }, []);
-
-  const updateFavicon = (t: 'cyan' | 'red' | 'yellow' | 'green') => {
-    const colors = {
-      red: { accent: '%23e52e4d', glow: '%23ff708d' },
-      cyan: { accent: '%2300f0ff', glow: '%2370f3ff' },
-      green: { accent: '%2300ff66', glow: '%23a3ff57' },
-      yellow: { accent: '%23f59e0b', glow: '%23fde047' }
-    };
-    const c = colors[t];
-
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><filter id="glow-filter" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs><rect width="32" height="32" rx="8" fill="%230b0d10" stroke="${c.accent}" stroke-width="1" stroke-opacity="0.15" /><path d="M9 10L15 16L9 22" stroke="${c.accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(%23glow-filter)" /><line x1="17" y1="22" x2="24" y2="22" stroke="${c.glow}" stroke-width="2.5" stroke-linecap="round" filter="url(%23glow-filter)" /></svg>`;
-
-    const link = document.querySelector("link[type='image/svg+xml']") as HTMLLinkElement;
-    if (link) {
-      link.href = `data:image/svg+xml;utf8,${svg}`;
-    }
-  };
-
-  const applyTheme = (t: 'cyan' | 'red' | 'yellow' | 'green') => {
-    const root = document.documentElement;
-    root.classList.remove('theme-cyan', 'theme-red', 'theme-green', 'theme-yellow');
-    root.classList.add(`theme-${t}`);
-    updateFavicon(t);
-  };
-
-  const cycleTheme = () => {
-    const nextTheme = theme === 'cyan' ? 'red' : theme === 'red' ? 'yellow' : theme === 'yellow' ? 'green' : 'cyan';
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
-    localStorage.setItem('portfolio-theme', nextTheme);
-  };
+  const [isSoundEnabled, setIsSoundEnabled] = useState(() => sound.isEnabled());
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -85,12 +18,17 @@ const Navigation = () => {
     { id: 'contact', label: 'Contact' },
   ];
 
+  const handleSoundToggle = () => {
+    const newState = sound.toggle();
+    setIsSoundEnabled(newState);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 30);
 
       const sections = navItems.map(item => document.getElementById(item.id));
-      const scrollPosition = window.scrollY + 120;
+      const scrollPosition = window.scrollY + 90;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -109,9 +47,10 @@ const Navigation = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    sound.playClick();
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 80;
+      const offset = 64;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -125,160 +64,147 @@ const Navigation = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const triggerCommandPalette = () => {
+    sound.playClick();
+    const event = new CustomEvent('open-command-palette');
+    window.dispatchEvent(event);
+  };
+
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-          ? 'bg-background/80 backdrop-blur-md border-b border-white/5 py-3'
-          : 'bg-transparent py-5'
-        }`}>
-        <div className="container mx-auto px-6">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <button
-              onClick={() => scrollToSection('home')}
-              className="flex items-center gap-2 group font-mono font-semibold text-lg tracking-wider"
-            >
-              <Terminal className="w-5 h-5 text-accent animate-pulse" />
-              <span className="text-foreground group-hover:text-accent transition-colors duration-300">
-                yashas<span className="text-accent">.</span>dev
-              </span>
-            </button>
+      <header className={`fixed top-0 left-0 right-0 z-50 h-[52px] transition-colors duration-200 border-b border-white/[0.06] ${
+        isScrolled ? 'bg-[#08090A]/90 backdrop-blur-md' : 'bg-[#08090A]/75 backdrop-blur-sm'
+      }`}>
+        <div className="max-w-6xl mx-auto h-full px-4 sm:px-6 flex items-center justify-between font-sans text-xs">
+          
+          {/* Brand Logo & Identifier */}
+          <button
+            onClick={() => scrollToSection('home')}
+            className="flex items-center gap-2 group select-none text-left"
+          >
+            <div className="w-5 h-5 rounded bg-[#5E6AD2]/20 border border-[#5E6AD2]/30 flex items-center justify-center font-bold text-[9px] text-[#8F9BFF]">
+              YG
+            </div>
+            <span className="text-[#F7F8F8] font-medium text-xs group-hover:text-white transition-colors">
+              Yashas H Gatty
+            </span>
+          </button>
 
-            {/* Desktop Nav Items */}
-            <div className="relative hidden md:flex items-center gap-1 bg-secondary/30 border border-white/5 px-2 py-1.5 rounded-full">
-              {/* Sliding Pill Background */}
-              <div
-                className="absolute rounded-full bg-white/5 transition-all duration-300 ease-out pointer-events-none"
-                style={{
-                  left: `${sliderStyle.left}px`,
-                  width: `${sliderStyle.width}px`,
-                  height: 'calc(100% - 12px)',
-                  top: '6px',
-                  opacity: sliderStyle.opacity,
-                }}
-              />
-
-              {/* Sliding Indicator Dot */}
-              <div
-                className="absolute bottom-1 w-1 h-1 rounded-full bg-accent transition-all duration-300 ease-out pointer-events-none"
-                style={{
-                  left: `${sliderStyle.left + (sliderStyle.width / 2) - 2}px`,
-                  opacity: sliderStyle.opacity,
-                }}
-              />
-
-              {navItems.map((item) => (
+          {/* Desktop Navigation Items */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
                 <button
                   key={item.id}
-                  id={`nav-btn-${item.id}`}
                   onClick={() => scrollToSection(item.id)}
-                  className={`relative py-1.5 px-4 text-xs font-mono font-medium rounded-full transition-all duration-300 z-10 ${activeSection === item.id
-                      ? 'text-accent'
-                      : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Desktop Action */}
-            <div className="hidden md:flex items-center gap-3">
-              <button
-                onClick={cycleTheme}
-                className="p-2 border border-white/5 bg-secondary/30 hover:border-accent/40 text-muted-foreground hover:text-accent rounded-xl hover:scale-115 transition-all duration-300 flex items-center gap-1.5 font-mono text-[10px]"
-                title="Switch Color Theme"
-              >
-                <Palette className="w-4 h-4 text-accent" />
-                <span className="uppercase text-foreground font-semibold">{theme}</span>
-              </button>
-
-              <Button
-                onClick={() => scrollToSection('contact')}
-                variant="outline"
-                size="sm"
-                className="font-mono text-xs border-accent/20 hover:border-accent hover:bg-accent/5 text-foreground hover:scale-105 transition-all duration-300"
-              >
-                <span>init_chat()</span>
-                <ArrowUpRight className="w-3.5 h-3.5 ml-1 text-accent" />
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center gap-2">
-              <button
-                onClick={cycleTheme}
-                className="p-2.5 border border-white/5 bg-secondary/40 hover:border-accent/40 text-muted-foreground hover:text-accent rounded-lg transition-all duration-300 flex items-center gap-1 font-mono text-[9px]"
-                title="Switch Color Theme"
-              >
-                <Palette className="w-3.5 h-3.5 text-accent" />
-                <span className="uppercase text-foreground font-semibold">{theme}</span>
-              </button>
-
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 border border-white/5 rounded-lg bg-secondary/40 text-foreground hover:text-accent transition-colors"
-                aria-label="Toggle menu"
-              >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] bg-background/98 backdrop-blur-xl flex flex-col justify-between animate-fade-in md:hidden">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-            <div className="flex items-center gap-2 font-mono font-semibold text-base tracking-wider">
-              <Terminal className="w-4 h-4 text-accent animate-pulse" />
-              <span className="text-foreground">
-                yashas<span className="text-accent">.</span>dev
-              </span>
-            </div>
-            
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 border border-white/5 rounded-lg bg-secondary/40 text-foreground hover:text-accent hover:border-accent/20 transition-all duration-300"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Menu Items Container */}
-          <div className="flex-1 overflow-y-auto px-6 py-8 flex flex-col justify-between">
-            <div className="flex flex-col gap-3">
-              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest mb-2">// DIRECTORY</div>
-              {navItems.map((item, index) => (
-                <button
-                  key={item.id}
-                  id={`mobile-btn-${item.id}`}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`text-left py-3 px-4 font-mono text-sm font-medium tracking-wide rounded-xl border transition-all duration-300 ${
-                    activeSection === item.id 
-                      ? 'text-accent bg-accent/5 border-accent/10' 
-                      : 'text-muted-foreground border-transparent hover:text-foreground hover:bg-white/5'
+                  className={`px-3 py-1 rounded-md text-xs transition-all duration-150 font-medium flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-[#141517] text-[#F7F8F8] border border-white/[0.06]'
+                      : 'text-[#A7ADB8] hover:text-[#F7F8F8] hover:bg-white/[0.03]'
                   }`}
                 >
-                  <span className="text-accent/40 mr-3 text-xs">0{index + 1}.</span>
-                  {item.label.toLowerCase()}()
+                  {isActive && <span className="w-1 h-1 rounded-full bg-[#5E6AD2]" />}
+                  <span>{item.label}</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
+          </nav>
 
-            {/* Footer */}
-            <div className="space-y-4 border-t border-white/5 pt-6 mt-8">
-              <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">// CONNECT</div>
-              <div className="flex flex-col gap-2.5 font-mono text-xs text-slate-400">
-                <a href="mailto:yashasgatty0@gmail.com" className="flex items-center gap-2 hover:text-accent transition-colors py-1">
-                  <span className="text-accent">@</span> yashasgatty0@gmail.com
-                </a>
-                <a href="tel:+916361334462" className="flex items-center gap-2 hover:text-accent transition-colors py-1">
-                  <span className="text-accent">#</span> +91 6361334462
-                </a>
-              </div>
+          {/* Right Actions & Command Menu Trigger */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              onClick={handleSoundToggle}
+              className={`p-1.5 rounded-md border transition-all duration-150 flex items-center gap-1 text-[11px] ${
+                isSoundEnabled
+                  ? 'bg-[#141517] border-[#5E6AD2]/30 text-[#8F9BFF]'
+                  : 'bg-[#101113] border-white/[0.06] text-[#747A85] hover:text-[#A7ADB8]'
+              }`}
+              title={isSoundEnabled ? 'UI Sound Effects ON' : 'UI Sound Effects OFF'}
+            >
+              {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+            </button>
+
+            <button
+              onClick={triggerCommandPalette}
+              className="px-2.5 py-1 bg-[#101113] hover:bg-[#141517] border border-white/[0.06] text-[#A7ADB8] hover:text-[#F7F8F8] rounded-md transition-colors flex items-center gap-2 text-[11px]"
+              title="Search commands (⌘K / Ctrl+K)"
+            >
+              <Search className="w-3.5 h-3.5 text-[#5E6AD2]" />
+              <span>Search</span>
+              <kbd className="px-1 py-0.5 rounded bg-white/[0.05] text-[10px] font-mono text-[#747A85] border border-white/[0.04]">⌘K</kbd>
+            </button>
+
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="linear-btn-primary px-3 py-1 text-xs flex items-center gap-1"
+            >
+              <span>Contact</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* Mobile Buttons */}
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={handleSoundToggle}
+              className={`p-1.5 rounded-md border text-[#A7ADB8] ${
+                isSoundEnabled ? 'bg-[#141517] border-[#5E6AD2]/30 text-[#8F9BFF]' : 'bg-[#101113] border-white/[0.06]'
+              }`}
+              title="Toggle Sound"
+            >
+              {isSoundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+
+            <button
+              onClick={triggerCommandPalette}
+              className="p-1.5 rounded-md bg-[#101113] border border-white/[0.06] text-[#A7ADB8]"
+              title="Search (⌘K)"
+            >
+              <Search className="w-4 h-4 text-[#5E6AD2]" />
+            </button>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-1.5 rounded-md bg-[#101113] border border-white/[0.06] text-[#F7F8F8]"
+              aria-label="Toggle Navigation"
+            >
+              {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
+          </div>
+
+        </div>
+      </header>
+
+      {/* Mobile Navigation Drawer Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-[#08090A]/95 backdrop-blur-xl pt-16 px-6 pb-6 flex flex-col justify-between md:hidden font-sans border-b border-white/[0.06]">
+          <div className="space-y-1">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85] mb-2 px-2">Navigation</div>
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
+                  activeSection === item.id
+                    ? 'bg-[#141517] text-white border border-white/[0.06]'
+                    : 'text-[#A7ADB8] hover:text-white hover:bg-white/[0.03]'
+                }`}
+              >
+                {activeSection === item.id && <span className="w-1.5 h-1.5 rounded-full bg-[#5E6AD2]" />}
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="pt-6 border-t border-white/[0.06] space-y-2.5 text-xs text-[#A7ADB8]">
+            <div className="flex items-center justify-between">
+              <span>Contact Email</span>
+              <a href="mailto:yashasgatty0@gmail.com" className="text-white hover:underline">yashasgatty0@gmail.com</a>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Location</span>
+              <span className="text-white">Mangaluru, Karnataka</span>
             </div>
           </div>
         </div>

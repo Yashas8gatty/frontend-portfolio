@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useState, Component, ErrorInfo, ReactNode } from 'react';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -8,112 +8,112 @@ import GithubContributions from '@/components/GithubContributions';
 import Experience from '@/components/Experience';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
-import { ScrollReveal } from '@/components/ScrollReveal';
+import VercelStrobe from '@/components/VercelStrobe';
+import { CommandPalette } from '@/components/CommandPalette';
 
-const Index = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallbackName?: string;
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+}
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+class SectionErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  public state: ErrorBoundaryState = {
+    hasError: false
+  };
 
-    let animationFrameId: number;
+  public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error(`Error in section ${this.props.fallbackName}:`, error, errorInfo);
+  }
 
-    const chars = '01';
-    const fontSize = 12;
-
-    const drops: number[] = [];
-    const initialColumns = Math.ceil(window.innerWidth / fontSize);
-    for (let x = 0; x < initialColumns; x++) {
-      drops[x] = Math.random() * -120;
+  public render() {
+    if (this.state.hasError) {
+      return (
+        <div className="py-8 px-6 text-center border border-white/[0.07] rounded-md bg-[#0C0D0F] max-w-xl mx-auto my-6 font-sans">
+          <p className="text-[#E5484D] text-xs font-semibold mb-1">
+            Section Error ({this.props.fallbackName || 'Component'})
+          </p>
+          <p className="text-[#747A85] text-xs font-mono">{this.state.error?.message}</p>
+        </div>
+      );
     }
 
-    const draw = () => {
-      const rootStyle = getComputedStyle(document.documentElement);
-      const accentColorRaw = rootStyle.getPropertyValue('--accent').trim();
-      const accentHSL = accentColorRaw ? `hsla(${accentColorRaw.replace(/\s+/g, ', ')}, 0.22)` : 'rgba(229, 46, 77, 0.22)';
+    return this.props.children;
+  }
+}
 
-      // Clear the canvas with destination-out to keep it transparent (no black accumulation overlay)
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+const Index = () => {
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = accentHSL;
-      ctx.font = `${fontSize}px monospace`;
-
-      const currentColumns = Math.ceil(canvas.width / fontSize);
-      while (drops.length < currentColumns) {
-        drops.push(Math.random() * -120);
-      }
-
-      for (let i = 0; i < currentColumns; i++) {
-        if (Math.random() > 0.985 && drops[i] * fontSize > canvas.height) {
-          drops[i] = 0;
-        }
-
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        const x = i * fontSize;
-        const y = Math.floor(drops[i]) * fontSize;
-
-        ctx.fillText(text, x, y);
-        drops[i] += 0.5;
-      }
-      animationFrameId = requestAnimationFrame(draw);
+  useEffect(() => {
+    const handleOpenCommandPalette = () => {
+      setIsCommandPaletteOpen(true);
     };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
-    };
+    window.addEventListener('open-command-palette', handleOpenCommandPalette);
+    return () => window.removeEventListener('open-command-palette', handleOpenCommandPalette);
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden relative">
-      {/* Full-Page Background Falling Binary Rain */}
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none opacity-[1.0] mix-blend-screen z-0" />
+    <div className="min-h-screen bg-[#08090A] text-[#F7F8F8] overflow-x-hidden relative font-sans selection:bg-[#5E6AD2]/20 selection:text-white">
+      
+      {/* Vercel Triangle Strobe Light Beam Animation */}
+      <VercelStrobe />
 
-      <Navigation />
+      {/* Subtle Linear Top Radial Atmosphere Spotlight */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[350px] bg-[radial-gradient(circle_at_50%_0%,rgba(94,106,210,0.04),transparent_45%)] pointer-events-none blur-3xl z-0" />
+
+      <SectionErrorBoundary fallbackName="CommandPalette">
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+        />
+      </SectionErrorBoundary>
+
+      <SectionErrorBoundary fallbackName="Navigation">
+        <Navigation />
+      </SectionErrorBoundary>
+
       <main className="relative z-10">
-        <Hero />
+        <SectionErrorBoundary fallbackName="Hero">
+          <Hero />
+        </SectionErrorBoundary>
 
-        <ScrollReveal>
+        <SectionErrorBoundary fallbackName="About">
           <About />
-        </ScrollReveal>
+        </SectionErrorBoundary>
 
-        <ScrollReveal>
-          <Skills />
-        </ScrollReveal>
-
-        <ScrollReveal>
+        <SectionErrorBoundary fallbackName="Experience">
           <Experience />
-        </ScrollReveal>
+        </SectionErrorBoundary>
 
-        <ScrollReveal>
+        <SectionErrorBoundary fallbackName="Projects">
           <Projects />
-        </ScrollReveal>
+        </SectionErrorBoundary>
 
-        <ScrollReveal>
+        <SectionErrorBoundary fallbackName="Skills">
+          <Skills />
+        </SectionErrorBoundary>
+
+        <SectionErrorBoundary fallbackName="GithubContributions">
           <GithubContributions />
-        </ScrollReveal>
+        </SectionErrorBoundary>
 
-        <ScrollReveal>
+        <SectionErrorBoundary fallbackName="Contact">
           <Contact />
-        </ScrollReveal>
+        </SectionErrorBoundary>
       </main>
-      <Footer />
+
+      <SectionErrorBoundary fallbackName="Footer">
+        <Footer />
+      </SectionErrorBoundary>
     </div>
   );
 };
