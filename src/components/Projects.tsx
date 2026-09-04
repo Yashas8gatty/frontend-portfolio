@@ -1,269 +1,311 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Github, ExternalLink, Globe, GitBranch, Code, ShieldAlert, Cpu } from 'lucide-react';
-
-interface Project {
-  title: string;
-  description: string;
-  codeSnippet: string;
-  technologies: string[];
-  features: string[];
-  github: string;
-  demo: string;
-  status: string;
-  branch: string;
-  langStats: string;
-}
+import { Github, ExternalLink, ArrowUpRight, CheckCircle2, Code2, Sparkles, Layers, Activity } from 'lucide-react';
 
 const Projects = () => {
-  const projects: Project[] = [
-    {
-      title: 'ResumeRoast',
-      description: 'Full-stack AI resume analysis platform using LLMs to process PDF resumes, generate ATS scores, structured critiques, and actionable recommendations with resilient backend processing.',
-      codeSnippet: `// roast_analyzer.ts
-export const roastResume = async (pdfText: string) => {
-  const prompt = \`Analyze resume PDF & compute ATS score: \${pdfText}\`;
-  const critique = await llmEngine.analyze(prompt);
-  await supabase.from('roasts').insert({ score: critique.atsScore });
-  return critique;
-};
-`,
-      technologies: ['React.js', 'TypeScript', 'Node.js', 'Express.js', 'Supabase', 'LLMs', 'AI/ML'],
-      features: [
-        'LLM PDF resume processing & ATS scoring',
-        'Structured critiques & recommendations',
-        'Resilient backend & Supabase storage',
-        'Optimized automated feedback workflows'
-      ],
-      github: 'https://github.com/Yashas8gatty/ResumeRoast',
-      demo: 'https://resumeroast-in.vercel.app/',
-      status: 'Completed',
-      branch: 'main',
-      langStats: 'TypeScript 50% | Node 30% | Supabase 20%'
-    },
-    {
-      title: 'EduCareer',
-      description: 'AI career guidance platform offering personalized course, internship, and job recommendations using semantic and hybrid ranking models (Sentence-BERT, Graph-BERT, OCR/NLP, FastAPI).',
-      codeSnippet: `// educareer_recommender.py
-@app.post("/api/v1/recommend")
-async def recommend_pathways(resume_text: str):
-    # Sentence-BERT + Graph-BERT hybrid ranking
-    vec = sbert_model.encode(resume_text)
-    rankings = graph_bert.calculate_similarity(vec)
-    return {"pathways": rankings.get_top_matches(k=3)}
-`,
-      technologies: ['React.js', 'TypeScript', 'FastAPI', 'Python', 'Sentence-BERT', 'Graph-BERT', 'AI/ML'],
-      features: [
-        '82.8% system accuracy OCR/NLP pipeline',
-        '89.2% skill mapping accuracy',
-        'Sub-224 ms recommendation latency',
-        '96% task completion rate matching'
-      ],
-      github: 'https://github.com/Uttham-412/educareer',
-      demo: '#',
-      status: 'Completed',
-      branch: 'main',
-      langStats: 'Python 55% | React 35% | FastAPI 10%'
-    },
-    {
-      title: 'Digital Twin Wildfire Detection',
-      description: 'Digital Twin framework for real-time wildfire detection and spread analysis using remote sensing satellite imagery, U-Net semantic segmentation, TensorFlow, and OpenCV.',
-      codeSnippet: `// wildfire_digital_twin.py
-def detect_wildfire_spread(remote_sensing_img):
-    # Process satellite bands & segment fire perimeter
-    tensor = preprocess_imagery(remote_sensing_img)
-    segmentation_mask = unet_model.predict(tensor)
-    return render_risk_visualization(segmentation_mask)
-`,
-      technologies: ['Python', 'TensorFlow', 'OpenCV', 'AI/ML', 'Remote Sensing', 'Digital Twin'],
-      features: [
-        'U-Net semantic segmentation framework',
-        'Remote sensing imagery processing',
-        'Digital Twin wildfire spread modeling',
-        'Risk monitoring visualization layers'
-      ],
-      github: 'https://github.com/Yashas8gatty',
-      demo: '#',
-      status: 'In Progress',
-      branch: 'main',
-      langStats: 'Python 65% | TensorFlow 25% | OpenCV 10%'
-    },
-    {
-      title: 'Campaign AI',
-      description: 'A campaign planning and analytics platform designed for small businesses to create, manage, and track AI-assisted marketing campaigns with JWT protection and analytics.',
-      codeSnippet: `// campaign_service.ts
-export const createCampaign = async (campaignData) => {
-  const response = await axios.post('/api/campaigns', campaignData, {
-    headers: { Authorization: \`Bearer \${token}\` }
-  });
-  return response.data;
-};`,
-      technologies: ['React.js', 'Vite', 'Tailwind CSS', 'Axios', 'JWT'],
-      features: [
-        'JWT authentication & route protection',
-        'QR-based engagement & tracking metrics',
-        'Scans, redemptions & analytics insights'
-      ],
-      github: 'https://github.com/Yashas8gatty/market_campaignAI',
-      demo: '#',
-      status: 'Completed',
-      branch: 'main',
-      langStats: 'React 60% | Tailwind 30% | Axios 10%'
-    }
-  ];
-
-  const categories = ['All', 'React.js', 'Python', 'AI/ML', 'Node.js', 'FastAPI'];
-  const [activeCategory, setActiveCategory] = useState('All');
-
-  const filteredProjects = activeCategory === 'All'
-    ? projects
-    : projects.filter(p => p.technologies.includes(activeCategory));
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
-  };
+  const [activeCategory, setActiveCategory] = useState<'All' | 'AI / ML' | 'Full Stack' | 'Research'>('All');
+  const categories = ['All', 'Full Stack', 'AI / ML', 'Research'] as const;
 
   return (
-    <section id="projects" className="py-24 relative overflow-hidden line-grid dot-grid">
-      <div className="container mx-auto px-6 relative z-10">
-
+    <section id="projects" className="py-16 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 space-y-10">
+        
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary border border-white/5 text-xs font-mono text-muted-foreground mb-4">
-            <span>git show branch:main</span>
+        <div className="border-b border-white/[0.06] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85] mb-0.5">FEATURED WORK // SHOWCASE</div>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#F7F8F8] font-sans">
+              Software Products & Research
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
-            Featured <span className="gradient-text-accent">Projects</span>
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto font-mono">
-            // Inspecting software builds and system integrations
-          </p>
-        </div>
 
-        {/* Filters bar */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12 max-w-lg mx-auto">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 rounded-full font-mono text-xs transition-all duration-300 ${activeCategory === cat
-                ? 'bg-accent text-accent-foreground font-semibold shadow-[0_2px_6px_rgba(0,199,217,0.15)]'
-                : 'bg-secondary/40 border border-white/5 text-muted-foreground hover:bg-white/5 hover:text-foreground'
+          {/* Filter Categories Bar */}
+          <div className="flex items-center gap-1 bg-[#101113] p-1 rounded border border-white/[0.06] select-none self-start sm:self-center">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3 py-1 rounded text-xs transition-colors font-medium ${
+                  activeCategory === cat
+                    ? 'bg-[#141517] text-[#F7F8F8] border border-white/[0.06]'
+                    : 'text-[#A7ADB8] hover:text-[#F7F8F8]'
                 }`}
-            >
-              {cat}
-            </button>
-          ))}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {filteredProjects.map((project, index) => (
-            <Card
-              key={index}
-              onMouseMove={handleMouseMove}
-              className="dev-window border-0 p-0 overflow-hidden flex flex-col justify-between group h-full hover:border-accent/30 transition-all duration-500 rounded-xl glow-card"
-            >
-              {/* Mock Browser Header */}
-              <div className="flex items-center justify-between px-4 py-2.5 bg-secondary/50 border-b border-white/5 select-none font-mono text-[10px]">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-                </div>
-                <div className="text-muted-foreground truncate max-w-[150px] flex items-center gap-1">
-                  <GitBranch className="w-3 h-3 text-primary" />
-                  <span>{project.branch}</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-black/30 text-emerald-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>{project.status.toUpperCase()}</span>
-                </div>
+        {/* Editorial Rhythm: Project 01 (Full-Width) -> Projects 02 & 03 (Two-Column) -> Project 04 (Full-Width) */}
+        <div className="space-y-12">
+
+          {/* PROJECT 01: ResumeRoast (Full-Width Featured Showcase) */}
+          <div className="space-y-5">
+            <div className="border-b border-white/[0.06] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs font-semibold text-[#747A85]">
+                  PROJECT-001
+                </span>
+                <span className="text-[#747A85]">•</span>
+                <h3 className="font-sans font-semibold text-lg sm:text-xl text-[#F7F8F8]">
+                  ResumeRoast
+                </h3>
+                <span className="text-xs text-[#A7ADB8] font-medium hidden md:inline">— AI Resume Analysis Platform</span>
               </div>
 
-              {/* Main Content */}
-              <div className="p-6 space-y-6 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-lg font-bold text-foreground group-hover:text-accent transition-colors duration-300 font-mono">
-                    {project.title}
-                  </h3>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded status-badge-completed self-start sm:self-center">
+                ✓ COMPLETED PRODUCT
+              </span>
+            </div>
 
-                  <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
-                    {project.description}
-                  </p>
+            {/* Split Grid: Software Mockup vs Specs + Code Preview */}
+            <div className="grid lg:grid-cols-12 gap-6 items-start">
+              
+              {/* Left Column Software Mockup (7 cols) */}
+              <div className="lg:col-span-7 linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-4 space-y-3 font-sans">
+                <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 text-xs">
+                  <span className="font-mono text-[#F7F8F8]">ResumeRoast / Analysis Console</span>
+                  <span className="font-mono text-[10px] text-[#26B56B]">main branch</span>
                 </div>
 
-                {/* Simulated Code Panel (Highlights on Hover) */}
-                <div className="relative h-[110px] rounded-lg overflow-hidden border border-white/5 bg-black/40 font-mono text-[9px] sm:text-[10px] text-muted-foreground p-3 select-none flex flex-col justify-between">
-                  <div className="flex justify-between items-center text-[8px] text-muted-foreground/45 border-b border-white/5 pb-1 mb-1">
-                    <span>SOURCE_PREVIEW</span>
-                    <Code className="w-3 h-3 text-muted-foreground/60" />
+                <div className="grid grid-cols-3 gap-2.5 font-mono text-center">
+                  <div className="p-2 rounded bg-[#101113] border border-white/[0.04]">
+                    <div className="text-[10px] text-[#747A85]">ATS SCORE</div>
+                    <div className="text-base font-bold text-[#F7F8F8] mt-0.5">82.8%</div>
                   </div>
-                  <pre className="flex-1 overflow-y-auto leading-relaxed text-slate-400 whitespace-pre">
-                    {project.codeSnippet}
-                  </pre>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent pointer-events-none" />
+                  <div className="p-2 rounded bg-[#101113] border border-white/[0.04]">
+                    <div className="text-[10px] text-[#747A85]">OCR ACCURACY</div>
+                    <div className="text-base font-bold text-[#F7F8F8] mt-0.5">82.8%</div>
+                  </div>
+                  <div className="p-2 rounded bg-[#101113] border border-white/[0.04]">
+                    <div className="text-[10px] text-[#747A85]">LATENCY</div>
+                    <div className="text-base font-bold text-[#F7F8F8] mt-0.5">&lt;224ms</div>
+                  </div>
                 </div>
 
-                {/* Key Features */}
-                <div className="space-y-2">
-                  <h4 className="text-[10px] font-mono font-bold tracking-wider uppercase text-primary">// target_features</h4>
-                  <ul className="grid grid-cols-1 gap-1.5 font-mono text-[10px] text-muted-foreground">
-                    {project.features.slice(0, 3).map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-center gap-1.5">
-                        <span className="text-primary">•</span>
-                        <span className="truncate">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="space-y-1.5 text-xs">
+                  <div className="text-[10px] font-mono uppercase text-[#747A85]">SKILLS DETECTED</div>
+                  <div className="flex flex-wrap gap-2 text-[#A7ADB8]">
+                    <span className="flex items-center gap-1 text-[#26B56B]"><CheckCircle2 className="w-3 h-3" /> Python</span>
+                    <span className="flex items-center gap-1 text-[#26B56B]"><CheckCircle2 className="w-3 h-3" /> React.js</span>
+                    <span className="flex items-center gap-1 text-[#26B56B]"><CheckCircle2 className="w-3 h-3" /> Machine Learning</span>
+                    <span className="flex items-center gap-1 text-[#26B56B]"><CheckCircle2 className="w-3 h-3" /> TypeScript</span>
+                  </div>
                 </div>
 
-                {/* Lang Stats */}
-                <div className="font-mono text-[10px] border-t border-white/5 pt-4 text-muted-foreground flex justify-between items-center">
-                  <span>COMPONENTS:</span>
-                  <span className="text-primary">{project.langStats}</span>
+                <div className="p-2.5 rounded bg-[#101113] border border-white/[0.04] text-xs text-[#A7ADB8] space-y-1">
+                  <div className="text-[10px] font-mono uppercase text-[#747A85]">SUGGESTIONS & CRITIQUE</div>
+                  <div>• Quantify measurable achievements in Software Developer Intern role</div>
+                  <div>• Add explicit TypeScript interfaces & PostgreSQL schema references</div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="p-6 pt-0 flex gap-3 border-t border-white/5 bg-secondary/10">
-                <Button
-                  variant="ghost"
-                  onClick={() => window.open(project.github, '_blank')}
-                  className="flex-1 font-mono text-[10px] sm:text-xs border border-white/5 hover:bg-white/5 hover:text-accent rounded-lg py-2 px-1 flex items-center justify-center gap-1.5"
-                >
-                  <Github className="w-3.5 h-3.5" />
-                  source_code
-                </Button>
-                {project.demo !== '#' && (
-                  <Button
-                    onClick={() => window.open(project.demo, '_blank')}
-                    className="flex-1 gradient-accent text-accent-foreground font-mono text-[10px] sm:text-xs rounded-lg py-2 px-1 flex items-center justify-center gap-1.5"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    live
-                  </Button>
-                )}
-              </div>
-            </Card>
-          ))}
-        </div>
+              {/* Right Column Code Preview & Specs (5 cols) */}
+              <div className="lg:col-span-5 space-y-3 font-sans text-xs">
+                <p className="text-[#A7ADB8] leading-relaxed">
+                  Full-stack AI resume analysis platform using LLMs to process PDF resumes, generate ATS scores, structured critiques, and actionable recommendations with resilient Supabase processing.
+                </p>
 
-        {/* View All Projects on Github */}
-        <div className="mt-16 text-center">
-          <Button
-            variant="outline"
-            onClick={() => window.open('https://github.com/Yashas8gatty?tab=repositories', '_blank')}
-            className="font-mono text-xs border-accent/20 hover:border-accent hover:bg-accent/5"
-          >
-            <Github className="w-4 h-4 mr-2" />
-            explore_all_repositories()
-          </Button>
+                {/* Code Preview Box */}
+                <div className="linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-3 space-y-1.5 font-mono text-[11px] text-[#A7ADB8]">
+                  <div className="text-[10px] text-[#747A85] border-b border-white/[0.04] pb-1">ResumeRoast / analyzer.ts</div>
+                  <div className="space-y-1 text-slate-300">
+                    <div><span className="text-[#A7ADB8]">import</span> &#123; analyzeResume &#125; <span className="text-[#A7ADB8]">from</span> <span className="text-[#26B56B]">'@engine/parser'</span></div>
+                    <div><span className="text-[#A7ADB8]">const</span> result = <span className="text-[#A7ADB8]">await</span> analyzeResume(file)</div>
+                    <div><span className="text-[#A7ADB8]">return</span> &#123;</div>
+                    <div className="pl-4">score: result.atsScore,</div>
+                    <div className="pl-4">suggestions: result.suggestions</div>
+                    <div>&#125;</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-1 font-mono text-[11px]">
+                  {['Python', 'FastAPI', 'React.js', 'OCR', 'Supabase'].map(t => (
+                    <span key={t} className="px-2 py-0.5 rounded bg-[#101113] border border-white/[0.06] text-[#F7F8F8]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex gap-2.5 pt-1">
+                  <a href="https://github.com/Yashas8gatty/ResumeRoast" target="_blank" rel="noopener noreferrer">
+                    <button className="linear-btn-secondary px-3 py-1.5 text-xs flex items-center gap-1.5">
+                      <Github className="w-3.5 h-3.5 text-[#A7ADB8]" />
+                      <span>Repository</span>
+                    </button>
+                  </a>
+
+                  <a href="https://resumeroast-in.vercel.app/" target="_blank" rel="noopener noreferrer">
+                    <button className="linear-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5">
+                      <span>View Live Product</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* TWO-COLUMN GRID: Project 02 (EduCareer) & Project 03 (Wildfire Digital Twin) */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            
+            {/* PROJECT 02: EduCareer */}
+            <div className="space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="border-b border-white/[0.06] pb-2 flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold text-[#747A85]">
+                    PROJECT-002
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded status-badge-completed">
+                    ✓ COMPLETED
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="font-sans font-semibold text-base sm:text-lg text-[#F7F8F8]">EduCareer</h3>
+                  <p className="text-xs text-[#A7ADB8] mt-0.5">AI Career Guidance & Recommendation System</p>
+                </div>
+
+                <p className="text-xs text-[#A7ADB8] leading-relaxed font-sans">
+                  AI career guidance platform offering personalized course, internship, and job recommendations using semantic and hybrid ranking models (Sentence-BERT, Graph-BERT, OCR/NLP, FastAPI).
+                </p>
+
+                {/* EduCareer Product Mockup */}
+                <div className="linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-3.5 space-y-2 font-sans text-xs">
+                  <div className="flex justify-between text-[10px] font-mono text-[#747A85] border-b border-white/[0.04] pb-1">
+                    <span>STUDENT GUIDANCE MATCHING</span>
+                    <span className="text-[#F7F8F8]">89.2% SKILL MATCH</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-center font-mono">
+                    <div className="p-2 rounded bg-[#101113] border border-white/[0.04]">
+                      <div className="text-[10px] text-[#747A85]">OCR PIPELINE</div>
+                      <div className="text-sm font-bold text-[#F7F8F8]">82.8%</div>
+                    </div>
+                    <div className="p-2 rounded bg-[#101113] border border-white/[0.04]">
+                      <div className="text-[10px] text-[#747A85]">TASK MATCH</div>
+                      <div className="text-sm font-bold text-[#F7F8F8]">96%</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-1 font-mono text-[11px]">
+                  {['React.js', 'Python', 'FastAPI', 'Sentence-BERT', 'Graph-BERT'].map(t => (
+                    <span key={t} className="px-2 py-0.5 rounded bg-[#101113] border border-white/[0.06] text-[#F7F8F8]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-3">
+                <a href="https://github.com/Uttham-412/educareer" target="_blank" rel="noopener noreferrer">
+                  <button className="linear-btn-secondary w-full py-1.5 text-xs flex items-center justify-center gap-1.5">
+                    <Github className="w-3.5 h-3.5 text-[#A7ADB8]" />
+                    <span>View Repository</span>
+                  </button>
+                </a>
+              </div>
+            </div>
+
+            {/* PROJECT 03: Wildfire Digital Twin */}
+            <div className="space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="border-b border-white/[0.06] pb-2 flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold text-[#747A85]">
+                    PROJECT-003
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded status-badge-ongoing">
+                    ● ACTIVE SYSTEM
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="font-sans font-semibold text-base sm:text-lg text-[#F7F8F8]">Digital Twin Wildfire Detection</h3>
+                  <p className="text-xs text-[#A7ADB8] mt-0.5">Satellite Remote Sensing & U-Net Segmentation</p>
+                </div>
+
+                <p className="text-xs text-[#A7ADB8] leading-relaxed font-sans">
+                  Digital Twin framework for real-time wildfire detection and spread analysis using remote sensing satellite imagery, U-Net semantic segmentation, TensorFlow, and OpenCV.
+                </p>
+
+                {/* Wildfire Simulation Mockup */}
+                <div className="linear-panel rounded-lg border border-white/[0.06] bg-[#08090A] p-3.5 space-y-2 font-sans text-xs">
+                  <div className="flex justify-between text-[10px] font-mono text-[#747A85] border-b border-white/[0.04] pb-1">
+                    <span>U-NET SEGMENTATION SIMULATION</span>
+                    <span className="text-[#F7F8F8]">88.4% ACCURACY</span>
+                  </div>
+                  <div className="p-2 rounded bg-[#101113] border border-white/[0.04] flex items-center justify-between font-mono text-[11px]">
+                    <span className="text-[#F7F8F8]">Satellite Map Layer: Active</span>
+                    <span className="text-[#26B56B]">REAL-TIME DETECT</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-1 font-mono text-[11px]">
+                  {['Python', 'TensorFlow', 'U-Net', 'OpenCV', 'Geospatial'].map(t => (
+                    <span key={t} className="px-2 py-0.5 rounded bg-[#101113] border border-white/[0.06] text-[#F7F8F8]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-3">
+                <a href="https://github.com/Yashas8gatty" target="_blank" rel="noopener noreferrer">
+                  <button className="linear-btn-secondary w-full py-1.5 text-xs flex items-center justify-center gap-1.5">
+                    <Github className="w-3.5 h-3.5 text-[#A7ADB8]" />
+                    <span>View Repository</span>
+                  </button>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          {/* PROJECT 04: Campaign AI (Full-Width Featured Showcase) */}
+          <div className="space-y-4 border-t border-white/[0.06] pt-6">
+            <div className="border-b border-white/[0.06] pb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs font-semibold text-[#747A85]">
+                  PROJECT-004
+                </span>
+                <span className="text-[#747A85]">•</span>
+                <h3 className="font-sans font-semibold text-base sm:text-lg text-[#F7F8F8]">
+                  Campaign AI
+                </h3>
+                <span className="text-xs text-[#A7ADB8] font-medium hidden md:inline">— AI Marketing Campaign Generator</span>
+              </div>
+
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded status-badge-completed self-start sm:self-center">
+                ✓ COMPLETED PRODUCT
+              </span>
+            </div>
+
+            <div className="grid lg:grid-cols-12 gap-6 items-center">
+              <div className="lg:col-span-8 space-y-2.5 text-xs text-[#A7ADB8] font-sans">
+                <p className="leading-relaxed">
+                  Campaign planning and analytics platform designed for business owners to create, manage, and track AI-assisted marketing campaigns with JWT route protection, QR-based engagement metrics, and redemption insights.
+                </p>
+                <div className="flex flex-wrap gap-1 font-mono text-[11px]">
+                  {['React.js', 'Vite', 'Tailwind CSS', 'JWT Auth', 'REST APIs'].map(t => (
+                    <span key={t} className="px-2 py-0.5 rounded bg-[#101113] border border-white/[0.06] text-[#F7F8F8]">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-4">
+                <a href="https://github.com/Yashas8gatty/market_campaignAI" target="_blank" rel="noopener noreferrer">
+                  <button className="linear-btn-secondary w-full py-2 text-xs flex items-center justify-center gap-2">
+                    <Github className="w-3.5 h-3.5 text-[#A7ADB8]" />
+                    <span>View Repository</span>
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>

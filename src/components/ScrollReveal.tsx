@@ -7,10 +7,15 @@ interface ScrollRevealProps {
 }
 
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, className = '', delay = 0 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -19,8 +24,8 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, className 
         }
       },
       {
-        threshold: 0.05,
-        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.01,
+        rootMargin: '100px 0px 100px 0px',
       }
     );
 
@@ -29,7 +34,13 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, className 
       observer.observe(currentRef);
     }
 
+    // Safety fallback: reveal after 300ms regardless
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 300);
+
     return () => {
+      clearTimeout(timer);
       if (currentRef) {
         observer.unobserve(currentRef);
       }
@@ -43,7 +54,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, className 
       className={`transition-all duration-700 ease-out motion-reduce:transition-none ${
         isVisible 
           ? 'opacity-100 translate-y-0 scale-100' 
-          : 'opacity-0 translate-y-8 md:translate-y-12 scale-[0.98]'
+          : 'opacity-0 translate-y-4 scale-[0.99]'
       } ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >

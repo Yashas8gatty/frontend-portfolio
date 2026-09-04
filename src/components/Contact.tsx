@@ -1,9 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card } from '@/components/ui/card';
-import { Mail, Phone, MapPin, Github, Linkedin, Send, MessageSquare, ShieldAlert, Cpu } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Send, ArrowUpRight } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +9,6 @@ const Contact = () => {
     email: '',
     message: ''
   });
-  const [currentTime, setCurrentTime] = useState('');
-
-  // Live ISO timestamp for the state inspector
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date().toISOString());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -28,199 +17,155 @@ const Contact = () => {
     }));
   };
 
-  const isFormReady = formData.name.trim() !== '' && formData.email.trim() !== '' && formData.message.trim() !== '';
-
-  const contactMethods = [
-    { icon: Mail, label: 'Email', value: 'yashasgatty0@gmail.com', href: 'mailto:yashasgatty0@gmail.com' },
-    { icon: Phone, label: 'Phone', value: '+91 6361334462', href: 'tel:+916361334462' },
-    { icon: MapPin, label: 'Location', value: 'Mangaluru, Karnataka, India', href: '#' }
-  ];
-
-  const socialLinks = [
-    { icon: Github, name: 'GitHub', link: 'https://github.com/yashas8gatty', username: '@yashas8gatty' },
-    { icon: Linkedin, name: 'LinkedIn', link: 'https://linkedin.com/in/yashasgatty', username: 'in/yashasgatty' }
-  ];
-
   return (
-    <section id="contact" className="py-24 relative overflow-hidden line-grid dot-grid">
-      <div className="container mx-auto px-6 relative z-10">
+    <section id="contact" className="py-16 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 space-y-8">
         
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary border border-white/5 text-xs font-mono text-muted-foreground mb-4">
-            <span>mail -s "hello" yashas.dev</span>
+        <div className="border-b border-white/[0.06] pb-3 flex items-center justify-between">
+          <div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85] mb-0.5">TRANSMISSION // CONTACT</div>
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#F7F8F8] font-sans">
+              Get in Touch
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
-            Get In <span className="gradient-text-accent">Touch</span>
-          </h2>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto font-mono">
-            // Establish a secure link or request collaboration
-          </p>
+          <div className="text-xs font-mono text-[#747A85] hidden sm:block">
+            STATUS: OPEN FOR ROLES
+          </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-stretch">
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
           
-          {/* Contact Form Column (Spans 6 cols) */}
-          <div className="lg:col-span-6 flex flex-col justify-between dev-window rounded-xl overflow-hidden border-white/5 p-6 sm:p-8">
-            <div className="space-y-6">
-              <div className="flex items-center gap-2 border-b border-white/5 pb-4 select-none">
-                <MessageSquare className="w-5 h-5 text-primary" />
-                <h3 className="font-mono text-sm font-semibold tracking-wider uppercase text-foreground">form_payload_sender</h3>
+          {/* Direct Message Form (7 cols) */}
+          <div className="lg:col-span-7 space-y-3 font-sans text-xs">
+            <div className="text-xs font-mono font-semibold text-[#F7F8F8] uppercase border-b border-white/[0.06] pb-2">
+              SEND DIRECT MESSAGE
+            </div>
+
+            <form
+              action="https://formspree.io/f/mldwozjz"
+              method="POST"
+              className="space-y-3 pt-1"
+            >
+              <div className="space-y-1">
+                <label htmlFor="name" className="text-[#A7ADB8]">Your Name</label>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="Enter name..."
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="bg-[#101113] border-white/[0.06] text-[#F7F8F8] text-xs h-8 rounded"
+                />
               </div>
 
-              <form
-                action="https://formspree.io/f/mldwozjz"
-                method="POST"
-                className="space-y-4 font-mono text-xs"
+              <div className="space-y-1">
+                <label htmlFor="email" className="text-[#A7ADB8]">Your Email Address</label>
+                <Input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Enter email..."
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="bg-[#101113] border-white/[0.06] text-[#F7F8F8] text-xs h-8 rounded"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label htmlFor="message" className="text-[#A7ADB8]">Message Specification</label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="Describe your inquiry or project details..."
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={4}
+                  className="bg-[#101113] border-white/[0.06] text-[#F7F8F8] text-xs p-2.5 rounded resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="linear-btn-primary w-full py-2 text-xs flex items-center justify-center gap-2"
               >
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-muted-foreground">// sender_name</label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Input name..."
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="border-white/5 bg-secondary/30 focus:border-accent text-foreground text-sm font-mono rounded-lg h-10 px-3"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-muted-foreground">// sender_email</label>
-                  <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="Input email..."
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="border-white/5 bg-secondary/30 focus:border-accent text-foreground text-sm font-mono rounded-lg h-10 px-3"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-muted-foreground">// message_payload</label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Write transmission details here..."
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className="border-white/5 bg-secondary/30 focus:border-accent text-foreground text-sm font-mono rounded-lg p-3 resize-none"
-                  />
-                </div>
-
-                <Button 
-                  type="submit"
-                  className="w-full gradient-accent text-accent-foreground font-mono text-xs font-semibold py-3 hover:scale-102 transition-all duration-300 mt-4 rounded-lg"
-                >
-                  <Send className="w-4 h-4 mr-2" />
-                  send_transmission()
-                </Button>
-              </form>
-            </div>
+                <Send className="w-3.5 h-3.5" />
+                <span>Transmit Message</span>
+              </button>
+            </form>
           </div>
 
-          {/* Live JSON State Inspector & Channels (Spans 6 cols) */}
-          <div className="lg:col-span-6 flex flex-col gap-6">
+          {/* Contact Details & Links (5 cols) */}
+          <div className="lg:col-span-5 space-y-4 font-sans text-xs">
             
-            {/* Live State Inspector */}
-            <div className="flex-1 flex flex-col">
-              <div className="font-mono text-[10px] text-muted-foreground mb-1.5 px-1 select-none flex items-center gap-1">
-                <Cpu className="w-3.5 h-3.5 text-primary" />
-                <span>STATE_INSPECTOR - transmission_status</span>
+            <div className="space-y-2">
+              <div className="text-xs font-mono font-semibold text-[#F7F8F8] border-b border-white/[0.06] pb-2">
+                DIRECT CONTACT SPECIFICATIONS
               </div>
 
-              <div className="dev-window rounded-xl overflow-hidden flex-grow flex flex-col border-white/5 min-h-[220px]">
-                <div className="flex items-center justify-between px-4 py-2 bg-secondary/50 border-b border-white/5 select-none font-mono text-[9px]">
-                  <div className="flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-muted-foreground">SMTP Gateway: Connected</span>
+              <div className="space-y-2 pt-1">
+                <a
+                  href="mailto:yashasgatty0@gmail.com"
+                  className="flex items-center justify-between p-2 rounded bg-[#101113] border border-white/[0.04] text-[#A7ADB8] hover:text-[#F7F8F8] transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-[#747A85]" />
+                    <span>yashasgatty0@gmail.com</span>
                   </div>
-                  <span className="text-muted-foreground">LOCAL STATE</span>
-                </div>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-[#747A85]" />
+                </a>
 
-                <div className="flex-1 p-5 font-mono text-xs bg-black/25 leading-relaxed overflow-x-auto select-text text-muted-foreground/60">
-                  <div><span className="text-muted-foreground/45">{`{`}</span></div>
-                  <div className="pl-4">
-                    <span className="text-muted-foreground/75">"status"</span>: <span className={isFormReady ? "text-emerald-400" : "text-primary/95"}>
-                      "{isFormReady ? "ready_to_transmit" : "awaiting_input"}"
-                    </span>,
+                <a
+                  href="tel:+916361334462"
+                  className="flex items-center justify-between p-2 rounded bg-[#101113] border border-white/[0.04] text-[#A7ADB8] hover:text-[#F7F8F8] transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-[#747A85]" />
+                    <span>+91 6361334462</span>
                   </div>
-                  <div className="pl-4">
-                    <span className="text-muted-foreground/75">"sender"</span>: <span className="text-foreground/90">"{formData.name || 'null'}"</span>,
+                  <ArrowUpRight className="w-3.5 h-3.5 text-[#747A85]" />
+                </a>
+
+                <div className="flex items-center justify-between p-2 rounded bg-[#101113] border border-white/[0.04] text-[#A7ADB8]">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-3.5 h-3.5 text-[#747A85]" />
+                    <span>Mangaluru, Karnataka, India</span>
                   </div>
-                  <div className="pl-4">
-                    <span className="text-muted-foreground/75">"email"</span>: <span className="text-foreground/90">"{formData.email || 'null'}"</span>,
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-muted-foreground/75">"payload_length"</span>: <span className="text-primary/95">{formData.message.length}</span>,
-                  </div>
-                  <div className="pl-4">
-                    <span className="text-muted-foreground/75">"timestamp"</span>: <span className="text-foreground/80">"{currentTime || new Date().toISOString()}"</span>
-                  </div>
-                  <div><span className="text-muted-foreground/45">{`}`}</span></div>
                 </div>
               </div>
             </div>
 
-            {/* Communication channels */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              {/* Info Badges */}
-              <div className="dev-window rounded-xl p-5 border-white/5 flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="font-mono text-[10px] text-primary uppercase tracking-wider">// direct_channels</div>
-                  <div className="space-y-3">
-                    {contactMethods.map((method, idx) => {
-                      const Icon = method.icon;
-                      return (
-                        <a
-                          key={idx}
-                          href={method.href}
-                          className="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors font-mono text-xs group"
-                        >
-                          <Icon className="w-4 h-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
-                          <span className="truncate">{method.value}</span>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
+            {/* External Links */}
+            <div className="pt-2">
+              <div className="text-[10px] font-mono text-[#747A85] uppercase mb-1.5">ENGINEERING PROFILES</div>
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href="https://github.com/yashas8gatty"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="linear-btn-secondary py-1.5 px-3 text-xs flex items-center justify-center gap-1.5"
+                >
+                  <Github className="w-3.5 h-3.5" />
+                  <span>GitHub</span>
+                </a>
 
-              {/* Social Channels */}
-              <div className="dev-window rounded-xl p-5 border-white/5 flex flex-col justify-between">
-                <div className="space-y-4">
-                  <div className="font-mono text-[10px] text-primary uppercase tracking-wider">// remote_nodes</div>
-                  <div className="space-y-3">
-                    {socialLinks.map((social, idx) => {
-                      const Icon = social.icon;
-                      return (
-                        <a
-                          key={idx}
-                          href={social.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3 text-muted-foreground hover:text-accent transition-colors font-mono text-xs group"
-                        >
-                          <Icon className="w-4 h-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
-                          <div>
-                            <div className="text-[9px] text-muted-foreground/50 leading-none">{social.name}</div>
-                            <div className="text-xs text-foreground mt-0.5 group-hover:text-accent transition-colors">{social.username}</div>
-                          </div>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </div>
+                <a
+                  href="https://linkedin.com/in/yashasgatty"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="linear-btn-secondary py-1.5 px-3 text-xs flex items-center justify-center gap-1.5"
+                >
+                  <Linkedin className="w-3.5 h-3.5 text-[#A7ADB8]" />
+                  <span>LinkedIn</span>
+                </a>
               </div>
             </div>
 
           </div>
+
         </div>
 
       </div>

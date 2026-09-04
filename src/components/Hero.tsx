@@ -1,159 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Mail, Terminal, ChevronRight, Play, RefreshCw, Cpu, Database, Eye } from 'lucide-react';
-import profileImage from '@/assets/profile-photo.jpg';
+import { useState, useEffect } from 'react';
+import { Github, Linkedin, Mail, ArrowRight, Download, ChevronDown, CheckCircle2, Terminal, Code2, Sparkles, Activity, X } from 'lucide-react';
+import profileImage from '@/assets/profile-photo.png';
+import githubData from '../data/github-data.json';
+import HeroWorkspace from './HeroWorkspace';
 
 const Hero = () => {
-  const [inputVal, setInputVal] = useState('');
-  const [terminalLogs, setTerminalLogs] = useState<{ type: 'input' | 'system' | 'output'; text: string }[]>([]);
-  const terminalLogsContainerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
-  const commandKeys = ['about', 'skills', 'projects', 'neofetch', 'contact', 'clear', 'github', 'help'];
-  const suggestion = inputVal ? commandKeys.find(c => c.startsWith(inputVal.trim().toLowerCase()) && c !== inputVal.trim().toLowerCase()) || '' : '';
-
-  // Auto scroll to bottom of terminal container only (prevents browser window scroll jumps)
   useEffect(() => {
-    const container = terminalLogsContainerRef.current;
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-  }, [terminalLogs]);
-
-  // Terminal boot simulation
-  useEffect(() => {
-    const isMobile = window.innerWidth < 768;
-    const intervalTime = isMobile ? 180 : 350;
-
-    const bootLines = [
-      { type: 'system' as const, text: 'YHG Terminal Shell [Version 1.0.4]' },
-      { type: 'system' as const, text: 'Initializing core modules... Done.' },
-      { type: 'system' as const, text: 'Fetching resume dependencies... Ok.' },
-      { type: 'system' as const, text: 'Type "help" or click the badges below to run commands.' }
-    ];
-
-    const timers: NodeJS.Timeout[] = [];
-    bootLines.forEach((line, index) => {
-      const t = setTimeout(() => {
-        setTerminalLogs(prev => [...prev, line]);
-      }, index * intervalTime);
-      timers.push(t);
-    });
-
-    return () => timers.forEach(clearTimeout);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsImageModalOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-
-  const handleCommand = (command: string) => {
-    const trimmedCmd = command.trim().toLowerCase();
-    const newLogs = [...terminalLogs, { type: 'input' as const, text: `yashas@dev:~$ ${command}` }];
-
-    if (trimmedCmd === 'help') {
-      newLogs.push({
-        type: 'output',
-        text: `Available commands:
-  about      - Display background details
-  skills     - List technical core stack
-  projects   - Show key projects built
-  contact    - Print contact endpoints
-  neofetch   - Display system environment & stats
-  clear      - Clear terminal logs`
-      });
-    } else if (trimmedCmd === 'about') {
-      newLogs.push({
-        type: 'output',
-        text: `Yashas H Gatty | B.E. in Artificial Intelligence & Machine Learning (Canara Engineering College)
-Software Developer Intern at Truck Hai Technologies & former intern at Institute of Applied Dermatology (IAD). Published Patent holder in Adaptive Career Trajectory & Resume AI systems.`
-      });
-    } else if (trimmedCmd === 'skills') {
-      newLogs.push({
-        type: 'output',
-        text: `CORE TECH STACK:
-  • Languages: Python, JavaScript, Golang, TypeScript, SQL, C
-  • Frontend & Mobile: React.js, React Native (Expo), Tailwind CSS, Vite
-  • Backend & DB: Node.js, Express.js, PostgreSQL, Supabase, MongoDB, REST APIs, BFF Layer
-  • AI/ML & Tools: LLMs, TensorFlow, U-Net, Scikit-Learn, Power BI, Git, Docker, Postman, Bruno`
-      });
-    } else if (trimmedCmd === 'projects') {
-      newLogs.push({
-        type: 'output',
-        text: `FEATURED PROJECTS & PUBLICATIONS:
-  1. ResumeRoast: Full-stack AI resume analysis platform (LLMs, React, Supabase).
-  2. EduCareer: AI career guidance system (Sentence-BERT, Graph-BERT, FastAPI).
-  3. Wildfire Digital Twin: Remote sensing spread simulation (U-Net, TensorFlow, OpenCV).
-  4. Published Patent: Unified Career Trajectory Analysis & Automated Resume Management.
-Type 'github' to view code repositories.`
-      });
-    } else if (trimmedCmd === 'contact') {
-      newLogs.push({
-        type: 'output',
-        text: `CONTACT CHANNELS:
-  • Email: yashasgatty0@gmail.com
-  • Phone: +91 6361334462
-  • Location: Mangaluru, Karnataka, India`
-      });
-    } else if (trimmedCmd === 'neofetch') {
-      newLogs.push({
-        type: 'output',
-        text: `yashas@portfolio-v2
--------------------
-OS: Canara Engineering College (B.E. AI & ML 2023–2027)
-Host: Yashas H Gatty (Software Developer Intern @ Truck Hai)
-Kernel: React / TypeScript / Vite / Node / Python / Golang
-Uptime: 4th Year Student
-Publications: 1 Published Patent
-Shell: React-Terminal-Shell
-IDE: Visual Studio Code
-Primary Engine: React, React Native (Expo), TypeScript, PostgreSQL, Python`
-      });
-    } else if (trimmedCmd === 'github') {
-      newLogs.push({
-        type: 'output',
-        text: 'Redirecting to GitHub profile (https://github.com/Yashas8gatty)...'
-      });
-      setTimeout(() => {
-        window.open('https://github.com/Yashas8gatty', '_blank');
-      }, 800);
-    } else if (trimmedCmd === 'clear') {
-      setTerminalLogs([]);
-      setInputVal('');
-      return;
-    } else if (trimmedCmd === '') {
-      // Do nothing
-    } else {
-      newLogs.push({
-        type: 'output',
-        text: `Command not found: "${command}". Type "help" for a list of valid commands.`
-      });
-    }
-
-    setTerminalLogs(newLogs);
-    setInputVal('');
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleCommand(inputVal);
-    } else if (e.key === 'Tab') {
-      e.preventDefault();
-      if (suggestion) {
-        setInputVal(suggestion);
-      }
-    } else if (e.key === 'ArrowRight') {
-      if (suggestion && inputRef.current?.selectionStart === inputVal.length) {
-        setInputVal(suggestion);
-      }
-    }
-  };
-
-  const focusTerminal = () => {
-    inputRef.current?.focus();
-  };
-
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 80;
+      const offset = 64;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -167,200 +31,257 @@ Primary Engine: React, React Native (Expo), TypeScript, PostgreSQL, Python`
   };
 
   return (
-    <section id="home" className="min-h-screen pt-28 pb-16 flex items-center justify-center relative overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+    <section id="home" className="pt-24 pb-20 relative overflow-hidden min-h-[90vh] flex flex-col justify-between">
+      
+      {/* Imperceptible atmosphere glow (max 0.04 opacity) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-[radial-gradient(circle_at_50%_0%,rgba(94,106,210,0.04),transparent_45%)] pointer-events-none blur-3xl z-0" />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
-          {/* Text Content Column */}
-          <div className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
+      {/* SatNaing Inspired Background Watermark Ticker Tape Overlay (From the Top) */}
+      <div className="absolute -top-16 inset-x-0 bottom-0 overflow-hidden pointer-events-none z-0 select-none flex flex-col justify-start pt-4 gap-8 sm:gap-12 opacity-[0.03] scale-110">
+        {[
+          "FULL-STACK DEVELOPER • AI ENGINEER • REACT NATIVE • FASTAPI • PYTHON • TYPESCRIPT •",
+          "SOFTWARE DEVELOPER INTERN • TRUCK HAI • IAD HOSPITAL SYSTEM • RESUMEROAST •",
+          "REACT.JS • EXPO • POSTGRESQL • SUPABASE • SENTENCE-BERT • U-NET • OPENCV •",
+          "FULL-STACK DEVELOPER • AI ENGINEER • REACT NATIVE • FASTAPI • PYTHON • TYPESCRIPT •",
+          "SOFTWARE DEVELOPER INTERN • TRUCK HAI • IAD HOSPITAL SYSTEM • RESUMEROAST •",
+          "REACT.JS • EXPO • POSTGRESQL • SUPABASE • SENTENCE-BERT • U-NET • OPENCV •",
+          "FULL-STACK DEVELOPER • AI ENGINEER • REACT NATIVE • FASTAPI • PYTHON • TYPESCRIPT •",
+          "SOFTWARE DEVELOPER INTERN • TRUCK HAI • IAD HOSPITAL SYSTEM • RESUMEROAST •",
+          "REACT.JS • EXPO • POSTGRESQL • SUPABASE • SENTENCE-BERT • U-NET • OPENCV •",
+          "FULL-STACK DEVELOPER • AI ENGINEER • REACT NATIVE • FASTAPI • PYTHON • TYPESCRIPT •",
+        ].map((tapeText, idx) => (
+          <div 
+            key={idx} 
+            className={`font-mono text-5xl sm:text-7xl font-extrabold uppercase tracking-widest text-[#F7F8F8] whitespace-nowrap leading-none ${
+              idx % 2 === 0 ? 'rotate-[-6deg] -translate-x-16' : 'rotate-[-6deg] translate-x-16'
+            }`}
+          >
+            {tapeText} {tapeText}
+          </div>
+        ))}
+      </div>
 
-            {/* Status Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent/5 border border-accent/10 text-accent font-mono text-xs tracking-wider uppercase animate-fade-in">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              <span>Open to Opportunities</span>
+      {/* Fixed Right-Hand Social Media Bar (SatNaing Style) */}
+      <div className="fixed right-6 bottom-8 z-40 hidden xl:flex flex-col items-center gap-4 text-[#A7ADB8] font-sans">
+        <a
+          href="https://github.com/Yashas8gatty"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white transition-colors p-1"
+          title="GitHub Profile"
+        >
+          <Github className="w-4 h-4" />
+        </a>
+        <a
+          href="https://linkedin.com/in/yashasgatty"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-white transition-colors p-1"
+          title="LinkedIn Profile"
+        >
+          <Linkedin className="w-4 h-4" />
+        </a>
+        <a
+          href="mailto:yashasgatty0@gmail.com"
+          className="hover:text-white transition-colors p-1"
+          title="Direct Email"
+        >
+          <Mail className="w-4 h-4" />
+        </a>
+        <div className="w-[1px] h-16 bg-white/[0.1]" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 w-full my-auto space-y-12">
+        
+        {/* SatNaing Inspired Split 2-Column Grid Layout */}
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          
+          {/* LEFT COLUMN: Hero Introduction Text (7 cols) */}
+          <div className="lg:col-span-7 space-y-5 font-sans">
+            
+            {/* Greeting Tag */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#101113] border border-white/[0.06] text-xs font-mono text-[#A7ADB8]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#26B56B]" />
+              <span>Hi, my name is</span>
             </div>
 
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1] animate-fade-in">
-              Hi, I'm <span className="gradient-text-accent font-extrabold">Yashas</span>
-              <br />
-              Crafting Digital Interfaces
+            {/* Main Name Heading */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#F7F8F8] font-sans leading-[1.08]">
+              Yashas H Gatty
             </h1>
 
-            {/* Paragraph Bio */}
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed animate-fade-in font-sans">
-              Software Developer Intern & B.E. student in Artificial Intelligence & Machine Learning at Canara Engineering College, engineering full-stack web/mobile applications, AI products, and PostgreSQL systems.
+            {/* Highlighted Role Subtitle */}
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-[#26B56B] font-sans tracking-tight">
+              Software Developer Intern & AI Engineer
+            </h2>
+
+            {/* Paragraph Description */}
+            <p className="text-xs sm:text-sm text-[#A7ADB8] leading-relaxed max-w-xl">
+              I am a Software Developer Intern and AI Engineer with a passion for building production applications. With expertise in React Native (Expo), TypeScript, React, and FastAPI on the backend, I bring structured technical skills and creative problem-solving to every system.
             </p>
 
-            {/* CTAs & Socials */}
-            <div className="flex flex-wrap gap-4 items-center justify-center lg:justify-start w-full animate-fade-in">
-              <Button
-                onClick={() => scrollToSection('projects')}
-                className="gradient-accent text-accent-foreground font-semibold hover:scale-105 transition-all duration-300 shadow-[0_0_12px_rgba(0,220,255,0.15)]"
-                size="lg"
-              >
-                <Play className="w-4 h-4 mr-2 fill-current" />
-                Explore Projects
-              </Button>
-              <Button
+            {/* Action CTAs */}
+            <div className="flex flex-wrap gap-3 pt-2 items-center">
+              <button
                 onClick={() => scrollToSection('contact')}
-                variant="outline"
-                className="border-white/10 hover:bg-white/5 hover:border-white/20 font-medium"
-                size="lg"
+                className="linear-btn-primary px-5 py-2.5 text-xs flex items-center gap-2 font-medium"
               >
-                Let's Connect
-              </Button>
-            </div>
+                <span>Contact me!</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
 
-            {/* Social Buttons */}
-            <div className="flex gap-3 justify-center lg:justify-start pt-2 w-full animate-fade-in">
+              <button
+                onClick={() => scrollToSection('projects')}
+                className="linear-btn-secondary px-4 py-2.5 text-xs flex items-center gap-2 font-medium"
+              >
+                <span>View Projects</span>
+              </button>
+
               <a
-                href="https://github.com/Yashas8gatty"
+                href="/Yashas-H-Gatty.pdf?v=1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 border border-white/5 bg-secondary/20 hover:bg-white/5 hover:border-white/20 hover:text-accent rounded-xl hover:scale-110 transition-all duration-300"
-                title="GitHub Profile"
               >
-                <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://linkedin.com/in/yashasgatty"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 border border-white/5 bg-secondary/20 hover:bg-white/5 hover:border-white/20 hover:text-accent rounded-xl hover:scale-110 transition-all duration-300"
-                title="LinkedIn Profile"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="mailto:yashasgatty0@gmail.com"
-                className="p-3 border border-white/5 bg-secondary/20 hover:bg-white/5 hover:border-white/20 hover:text-accent rounded-xl hover:scale-110 transition-all duration-300"
-                title="Send Email"
-              >
-                <Mail className="w-5 h-5" />
+                <button
+                  className="linear-btn-secondary px-4 py-2.5 text-xs flex items-center gap-2 font-medium"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#A7ADB8]" />
+                  <span>Resume</span>
+                </button>
               </a>
             </div>
 
           </div>
 
-          {/* Interactive Console / Photo Column */}
-          <div className="lg:col-span-6 flex flex-col gap-6 w-full animate-fade-in-delayed">
-
-            {/* Developer Terminal Widget */}
-            <div
-              onClick={focusTerminal}
-              className="dev-window rounded-xl overflow-hidden cursor-text min-h-[340px] flex flex-col font-mono text-sm border-white/10"
-            >
-              {/* Window Header */}
-              <div className="flex items-center justify-between px-4 py-3 bg-secondary/50 border-b border-white/5 select-none">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-destructive/80" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                </div>
-                <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
-                  <Terminal className="w-3 h-3 text-accent" />
-                  <span>bash - yashas@dev:~</span>
-                </div>
-                <div className="w-12" /> {/* spacer */}
-              </div>
-
-              {/* Terminal Logs Panel */}
-              <div ref={terminalLogsContainerRef} className="flex-1 p-5 overflow-y-auto space-y-2.5 max-h-[260px] text-xs md:text-sm">
-                {terminalLogs.map((log, index) => (
-                  <div
-                    key={index}
-                    className={`whitespace-pre-wrap leading-relaxed ${log.type === 'input'
-                        ? 'text-foreground font-semibold'
-                        : log.type === 'system'
-                          ? 'text-accent/80'
-                          : 'text-muted-foreground'
-                      }`}
-                  >
-                    {log.text}
+          {/* RIGHT COLUMN: Featured Developer Profile & Workspace Card (5 cols) */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="linear-panel rounded-xl border border-white/[0.08] bg-[#0C0D0F] p-5 space-y-4 shadow-2xl relative group">
+              
+              {/* Profile Image & Status Header */}
+              <div className="flex items-center gap-4 border-b border-white/[0.06] pb-4">
+                <div className="relative shrink-0">
+                  <img 
+                    src={profileImage} 
+                    alt="Yashas H Gatty" 
+                    onClick={() => setIsImageModalOpen(true)}
+                    className="w-16 h-16 rounded-lg object-cover border border-white/[0.1] shadow-lg group-hover:scale-105 transition-all duration-300 cursor-pointer hover:border-white/30" 
+                    title="Click to enlarge photo"
+                  />
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#08090A] flex items-center justify-center pointer-events-none">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#26B56B] animate-pulse" />
                   </div>
-                ))}
+                </div>
+
+                <div className="space-y-1 font-sans text-xs">
+                  <div className="font-semibold text-sm text-[#F7F8F8]">Yashas H Gatty</div>
+                  <div className="text-[11px] text-[#A7ADB8]">B.E. AI & ML (2023-2027)</div>
+                  <div className="text-[10px] font-mono text-[#26B56B] flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>Open for Software Roles</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Terminal Input Line */}
-              <div className="flex items-center gap-2 px-5 py-3 border-t border-white/5 bg-secondary/20 relative">
-                <span className="text-accent font-bold">yashas@dev:~$</span>
-                <div className="flex-1 relative flex items-center font-mono">
-                  {suggestion && (
-                    <span className="absolute left-0 text-muted-foreground/25 text-sm select-none pointer-events-none">
-                      {inputVal}
-                      <span className="text-muted-foreground/45">{suggestion.slice(inputVal.length)}</span>
+              {/* Active Roles & Core Specs */}
+              <div className="space-y-2 font-sans text-xs">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85]">CURRENT ENGAGEMENTS</div>
+                
+                <div className="p-2.5 rounded bg-[#101113] border border-white/[0.04] space-y-1">
+                  <div className="text-[#F7F8F8] font-medium text-xs">Truck Hai Technologies</div>
+                  <div className="text-[11px] text-[#A7ADB8]">Software Developer Intern • Production Web & Mobile</div>
+                </div>
+
+                <div className="p-2.5 rounded bg-[#101113] border border-white/[0.04] space-y-1">
+                  <div className="text-[#F7F8F8] font-medium text-xs">Institute of Applied Dermatology</div>
+                  <div className="text-[11px] text-[#A7ADB8]">Full Stack Developer • Enterprise Hospital System</div>
+                </div>
+              </div>
+
+              {/* Core Technologies Badges */}
+              <div className="space-y-1.5">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85]">CORE STACK</div>
+                <div className="flex flex-wrap gap-1 font-mono text-[10px]">
+                  {['React Native', 'Expo', 'TypeScript', 'React.js', 'FastAPI', 'PostgreSQL', 'Python'].map(t => (
+                    <span key={t} className="px-2 py-0.5 rounded bg-[#101113] border border-white/[0.06] text-[#F7F8F8]">
+                      {t}
                     </span>
-                  )}
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputVal}
-                    onChange={(e) => setInputVal(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="type command..."
-                    className="w-full bg-transparent border-0 outline-none text-foreground focus:ring-0 placeholder:text-muted-foreground/30 p-0 text-sm font-mono relative z-10"
-                  />
-                </div>
-                <Button
-                  onClick={() => handleCommand(inputVal)}
-                  size="icon"
-                  variant="ghost"
-                  className="w-7 h-7 hover:bg-white/5 text-accent"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* Quick Command Badges (Click to run) */}
-            <div className="flex flex-wrap items-center gap-2 px-1">
-              <span className="text-xs text-muted-foreground font-mono mr-1">// click:</span>
-              {['about', 'skills', 'projects', 'neofetch', 'contact'].map((cmd) => (
-                <button
-                  key={cmd}
-                  onClick={() => handleCommand(cmd)}
-                  className="px-3 py-1 text-xs font-mono border border-white/5 bg-secondary/30 hover:bg-accent/10 hover:border-accent/40 hover:text-accent rounded-full transition-all duration-300"
-                >
-                  {cmd}()
-                </button>
-              ))}
-            </div>
-
-            {/* Mini Photo & Stats Bar */}
-            <div className="dev-window rounded-xl p-4 flex items-center justify-between border-white/10">
-              <div className="flex items-center gap-4">
-                <div className="relative w-12 h-12 rounded-lg overflow-hidden border border-white/10 bg-secondary/40 shrink-0">
-                  <img
-                    src={profileImage}
-                    alt="Yashas"
-                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 bg-accent/10 pointer-events-none" />
-                </div>
-                <div>
-                  <h3 className="font-mono text-sm font-semibold text-foreground">Yashas H Gatty</h3>
-                  <p className="text-xs text-muted-foreground font-mono">Mangaluru, India - 4th Year AI&ML</p>
+                  ))}
                 </div>
               </div>
-              <div className="flex items-center gap-5 text-right font-mono text-xs hidden sm:flex text-muted-foreground">
-                <div className="flex items-center gap-1.5">
-                  <Cpu className="w-3.5 h-3.5 text-accent/70" />
-                  <span>ONLINE</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Database className="w-3.5 h-3.5 text-accent/70" />
-                  <span>SYS: OK</span>
-                </div>
+
+              {/* GitHub Live Contributions Badge */}
+              <div className="pt-2 border-t border-white/[0.04] flex items-center justify-between font-mono text-[11px] text-[#747A85]">
+                <span>GitHub Past Year</span>
+                <span className="text-[#F7F8F8] font-semibold">{githubData.stats.totalContributions} Contributions</span>
               </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        {/* Live Workspace Preview Below Split Grid */}
+        <div className="pt-6">
+          <div className="text-[10px] font-mono uppercase tracking-wider text-[#747A85] mb-3 text-center">
+            ACTIVE DEVELOPMENT WORKSPACE // YASHAS WORKSPACE
+          </div>
+          <HeroWorkspace />
+        </div>
+
+      </div>
+
+      {/* SatNaing Inspired Bottom Scroll Mouse Indicator */}
+      <div className="pt-8 flex flex-col items-center gap-1.5 text-[#747A85] font-mono text-[10px] select-none">
+        <span>Scroll</span>
+        <button
+          onClick={() => scrollToSection('about')}
+          className="w-5 h-8 rounded-full border border-white/[0.1] flex items-center justify-center hover:border-white/30 transition-colors"
+          title="Scroll to About"
+        >
+          <ChevronDown className="w-3.5 h-3.5 animate-bounce text-[#A7ADB8]" />
+        </button>
+      </div>
+
+      {/* Interactive Profile Image Pop-Up Lightbox Modal */}
+      {isImageModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#08090A]/90 backdrop-blur-md font-sans text-xs select-none transition-all duration-300"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <div 
+            className="linear-panel rounded-xl border border-white/[0.1] bg-[#0C0D0F] p-4 shadow-2xl max-w-sm sm:max-w-md w-full space-y-3 relative transition-all transform scale-100 animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Bar */}
+            <div className="flex items-center justify-between border-b border-white/[0.07] pb-2 text-[11px] font-mono text-[#A7ADB8]">
+              <span className="text-[#F7F8F8] font-medium font-sans">Yashas H Gatty — Profile Photo</span>
+              <button 
+                onClick={() => setIsImageModalOpen(false)}
+                className="p-1 rounded hover:bg-white/[0.06] text-[#A7ADB8] hover:text-white transition-colors"
+                title="Close modal (Esc)"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
+            {/* Enlarged Photo Container */}
+            <div className="overflow-hidden rounded-lg border border-white/[0.08] bg-[#08090A] flex items-center justify-center">
+              <img 
+                src={profileImage} 
+                alt="Yashas H Gatty Profile" 
+                className="w-full max-h-[65vh] object-cover rounded-lg"
+              />
+            </div>
+
+            {/* Footer Specifications */}
+            <div className="flex items-center justify-between text-[11px] font-mono text-[#747A85] pt-1">
+              <span>Software Developer Intern & AI Engineer</span>
+              <span>Press Esc to close</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
     </section>
   );
 };
