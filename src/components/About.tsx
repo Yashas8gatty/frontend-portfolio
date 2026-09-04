@@ -33,16 +33,16 @@ const About = () => {
   };
 
   const passions = [
-    { icon: Code2, title: 'Frontend Systems', desc: 'Building modular interfaces using React.js, TypeScript, and Tailwind CSS.' },
-    { icon: Laptop, title: 'Intelligent Products', desc: 'Integrating machine learning APIs with FastAPI, leveraging Sentence-BERT models.' },
-    { icon: Compass, title: 'Data Analytics', desc: 'Creating structured dashboards and data visualizations with Scikit-Learn and Power BI.' },
+    { icon: Code2, title: 'Frontend & Mobile Systems', desc: 'Building modular web interfaces with React.js, TypeScript, Tailwind CSS, and mobile apps with React Native (Expo).' },
+    { icon: Laptop, title: 'Intelligent Products & LLMs', desc: 'Integrating machine learning APIs, FastAPI endpoints, LLMs, Sentence-BERT models, and computer vision pipelines.' },
+    { icon: Compass, title: 'Full-Stack & Databases', desc: 'Constructing robust RESTful APIs, JWT auth with RBAC, PostgreSQL schemas, Supabase, and analytics dashboards.' },
   ];
 
   const stats = [
-    { label: 'Active Internship', value: '1' },
-    { label: 'Featured Projects', value: '3' },
+    { label: 'Industry Roles', value: '2' },
+    { label: 'Featured Projects', value: '4' },
+    { label: 'Published Patents', value: '1' },
     { label: 'Core Tech Stack', value: '10+' },
-    { label: 'Academic Years', value: '4' },
   ];
 
   return (
@@ -111,16 +111,16 @@ const About = () => {
 
               <div className="space-y-4 font-sans text-muted-foreground leading-relaxed text-sm sm:text-base">
                 <p>
-                  I am a fourth-year student pursuing a B.E. in <span className="text-foreground font-semibold">Artificial Intelligence & Machine Learning</span> at Canara Engineering College. Alongside my academic focus, I build production-facing frontend applications as an intern, translating design layouts into scalable code.
+                  I am a final-year B.E. student in <span className="text-foreground font-semibold">Artificial Intelligence & Machine Learning</span> at Canara Engineering College (2023–2027). I build production-ready full-stack web and mobile applications, specializing in <span className="text-foreground font-semibold">React, React Native (Expo), TypeScript, Node.js, Express, PostgreSQL, and FastAPI</span>.
                 </p>
                 <p>
-                  My development interests span client-side systems, responsive user interfaces, and the integration of machine learning models. I specialize in building modular UI components with <span className="text-foreground font-semibold">React.js, TypeScript, and Tailwind CSS</span>, aiming to create intuitive and intelligent web products.
+                  Having interned at <span className="text-foreground font-semibold">Truck Hai Technologies</span> and <span className="text-foreground font-semibold">Institute of Applied Dermatology (IAD)</span>, I have engineered hospital management systems, BFF assembly layers, and AI platforms like <span className="text-foreground font-semibold">ResumeRoast</span> and <span className="text-foreground font-semibold">EduCareer</span>, along with publishing a patent in adaptive career recommendation architectures.
                 </p>
               </div>
             </div>
 
             <div className="mt-8 pt-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-              <span className="text-xs font-mono text-muted-foreground">// active_status: coding</span>
+              <span className="text-xs font-mono text-muted-foreground">// active_status: software_developer_intern</span>
               <a href="/Yashas-H-Gatty.pdf?v=1" target="_blank" rel="noopener noreferrer" className="inline-block w-full sm:w-auto">
                 <Button
                   variant="outline"
@@ -186,7 +186,32 @@ const About = () => {
             </div>
 
             <div className="pt-4 border-t border-white/5 text-[10px] font-mono text-muted-foreground leading-relaxed">
-              * metrics collected from active repository logs
+              * metrics collected from active resume logs
+            </div>
+          </div>
+
+          {/* Published Patent Card (Spans 3 cols on lg) */}
+          <div className="lg:col-span-3 dev-window glow-card rounded-xl p-8 flex flex-col justify-between border-white/5 relative overflow-hidden" onMouseMove={handleMouseMove}>
+            <div className="absolute top-0 right-0 p-4 opacity-10 font-mono text-6xl font-bold text-accent select-none pointer-events-none">PATENT</div>
+            <div className="space-y-4 relative z-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-4">
+                <div className="flex items-center gap-2">
+                  <Award className="w-5 h-5 text-accent" />
+                  <h3 className="font-mono text-sm font-semibold tracking-wider uppercase text-foreground">certifications_&_publications</h3>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent font-mono text-xs shrink-0 self-start sm:self-center">
+                  PUBLISHED PATENT
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="font-mono text-base sm:text-lg font-bold text-foreground leading-snug">
+                  “A System and Method for Unified Career Trajectory Analysis, Adaptive Professional Recommendation, and Automated Resume Management”
+                </h4>
+                <p className="text-xs sm:text-sm text-muted-foreground font-sans leading-relaxed">
+                  Published Patent specification defining an AI-driven ecosystem for unified career trajectory modeling, adaptive recommendation engines using semantic rankings, and resilient automated resume analysis pipelines.
+                </p>
+              </div>
             </div>
           </div>
 

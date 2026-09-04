@@ -19,47 +19,22 @@ interface Project {
 const Projects = () => {
   const projects: Project[] = [
     {
-      title: 'EduCareer',
-      description: 'An intelligent career counseling and guidance ecosystem. Utilizes Sentence-BERT, Graph-BERT, and OCR to process resumes, map academic records, and recommend matching career pathways through a FastAPI backend.',
-      codeSnippet: `// educareer_recommender.py
-@app.post("/api/v1/recommend")
-async def recommend_pathways(resume_text: str):
-    # Vectorize resume and query career graph
-    resume_vector = sentence_bert_model.encode(resume_text)
-    scores = graph_bert.calculate_similarity(resume_vector)
-    return {"pathways": scores.get_top_matches(k=3)}
-`,
-      technologies: ['React.js', 'FastAPI', 'Python', 'Sentence-BERT', 'Graph-BERT', 'OCR'],
-      features: [
-        'OCR resume document parsing',
-        'Sentence-BERT semantic encoding',
-        'Graph-BERT relationship scoring',
-        'Interactive path suggestions'
-      ],
-      github: 'https://github.com/Uttham-412/educareer',
-      demo: '#',
-      status: 'Completed',
-      branch: 'main',
-      langStats: 'Python 55% | React 35% | FastAPI 10%'
-    },
-    {
       title: 'ResumeRoast',
-      description: 'Interactive resume analysis and ATS evaluation platform. Parses PDF uploads, extracts metadata, compares content against job descriptions using LLMs, and stores user reports in Supabase.',
+      description: 'Full-stack AI resume analysis platform using LLMs to process PDF resumes, generate ATS scores, structured critiques, and actionable recommendations with resilient backend processing.',
       codeSnippet: `// roast_analyzer.ts
 export const roastResume = async (pdfText: string) => {
-  const prompt = \`Critique this resume and calculate ATS scores: \${pdfText}\`;
-  const response = await llmClient.generate(prompt);
-  const data = JSON.parse(response.text);
-  await supabase.from('roasts').insert({ score: data.score });
-  return data;
+  const prompt = \`Analyze resume PDF & compute ATS score: \${pdfText}\`;
+  const critique = await llmEngine.analyze(prompt);
+  await supabase.from('roasts').insert({ score: critique.atsScore });
+  return critique;
 };
 `,
-      technologies: ['React.js', 'Node.js', 'Express.js', 'Supabase', 'LLMs', 'PDF Parse'],
+      technologies: ['React.js', 'TypeScript', 'Node.js', 'Express.js', 'Supabase', 'LLMs', 'AI/ML'],
       features: [
-        'LLM automated feedback API',
-        'Supabase row-level database',
-        'PDF text buffer extraction',
-        'ATS match calculations'
+        'LLM PDF resume processing & ATS scoring',
+        'Structured critiques & recommendations',
+        'Resilient backend & Supabase storage',
+        'Optimized automated feedback workflows'
       ],
       github: 'https://github.com/Yashas8gatty/ResumeRoast',
       demo: 'https://resumeroast-in.vercel.app/',
@@ -68,8 +43,55 @@ export const roastResume = async (pdfText: string) => {
       langStats: 'TypeScript 50% | Node 30% | Supabase 20%'
     },
     {
+      title: 'EduCareer',
+      description: 'AI career guidance platform offering personalized course, internship, and job recommendations using semantic and hybrid ranking models (Sentence-BERT, Graph-BERT, OCR/NLP, FastAPI).',
+      codeSnippet: `// educareer_recommender.py
+@app.post("/api/v1/recommend")
+async def recommend_pathways(resume_text: str):
+    # Sentence-BERT + Graph-BERT hybrid ranking
+    vec = sbert_model.encode(resume_text)
+    rankings = graph_bert.calculate_similarity(vec)
+    return {"pathways": rankings.get_top_matches(k=3)}
+`,
+      technologies: ['React.js', 'TypeScript', 'FastAPI', 'Python', 'Sentence-BERT', 'Graph-BERT', 'AI/ML'],
+      features: [
+        '82.8% system accuracy OCR/NLP pipeline',
+        '89.2% skill mapping accuracy',
+        'Sub-224 ms recommendation latency',
+        '96% task completion rate matching'
+      ],
+      github: 'https://github.com/Uttham-412/educareer',
+      demo: '#',
+      status: 'Completed',
+      branch: 'main',
+      langStats: 'Python 55% | React 35% | FastAPI 10%'
+    },
+    {
+      title: 'Digital Twin Wildfire Detection',
+      description: 'Digital Twin framework for real-time wildfire detection and spread analysis using remote sensing satellite imagery, U-Net semantic segmentation, TensorFlow, and OpenCV.',
+      codeSnippet: `// wildfire_digital_twin.py
+def detect_wildfire_spread(remote_sensing_img):
+    # Process satellite bands & segment fire perimeter
+    tensor = preprocess_imagery(remote_sensing_img)
+    segmentation_mask = unet_model.predict(tensor)
+    return render_risk_visualization(segmentation_mask)
+`,
+      technologies: ['Python', 'TensorFlow', 'OpenCV', 'AI/ML', 'Remote Sensing', 'Digital Twin'],
+      features: [
+        'U-Net semantic segmentation framework',
+        'Remote sensing imagery processing',
+        'Digital Twin wildfire spread modeling',
+        'Risk monitoring visualization layers'
+      ],
+      github: 'https://github.com/Yashas8gatty',
+      demo: '#',
+      status: 'In Progress',
+      branch: 'main',
+      langStats: 'Python 65% | TensorFlow 25% | OpenCV 10%'
+    },
+    {
       title: 'Campaign AI',
-      description: 'A campaign planning and analytics platform designed for small businesses to create, manage, and track AI-assisted marketing campaigns.',
+      description: 'A campaign planning and analytics platform designed for small businesses to create, manage, and track AI-assisted marketing campaigns with JWT protection and analytics.',
       codeSnippet: `// campaign_service.ts
 export const createCampaign = async (campaignData) => {
   const response = await axios.post('/api/campaigns', campaignData, {
@@ -91,7 +113,7 @@ export const createCampaign = async (campaignData) => {
     }
   ];
 
-  const categories = ['All', 'React.js', 'Python', 'Node.js', 'FastAPI'];
+  const categories = ['All', 'React.js', 'Python', 'AI/ML', 'Node.js', 'FastAPI'];
   const [activeCategory, setActiveCategory] = useState('All');
 
   const filteredProjects = activeCategory === 'All'

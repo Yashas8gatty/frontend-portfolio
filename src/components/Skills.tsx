@@ -24,11 +24,12 @@ const Skills = () => {
       title: 'Languages',
       icon: Cpu,
       skills: [
-        { name: 'Python', level: 'Proficient', projects: ['EduCareer', 'AI Pipelines'], details: 'Primary language for machine learning, data processing pipelines, and FastAPI endpoints development.', since: '2023' },
-        { name: 'JavaScript', level: 'Expert', projects: ['ResumeRoast', 'EduCareer'], details: 'Experienced in core JavaScript (ES6+), DOM operations, async processes, and full-stack scripting.', since: '2022' },
-        { name: 'TypeScript', level: 'Proficient', projects: ['ResumeRoast', 'Portfolio'], details: 'Enforces robust type safety, type declaration files, interfaces, and strict build-time validation.', since: '2023' },
-        { name: 'SQL', level: 'Proficient', projects: ['ResumeRoast', 'Data Models'], details: 'Writing complex relational database queries, table schema designs, indexing, and joins optimization.', since: '2023' },
-        { name: 'C', level: 'Proficient', projects: ['Academic Tasks'], details: 'Academic background in low-level programming, compiler tasks, and core computational complexity.', since: '2022' },
+        { name: 'Python', level: 'Proficient', projects: ['EduCareer', 'Wildfire Digital Twin'], details: 'Primary language for AI/ML models, remote sensing, U-Net segmentation, and FastAPI backend development.', since: '2023' },
+        { name: 'JavaScript', level: 'Expert', projects: ['ResumeRoast', 'Truck Hai', 'IAD System'], details: 'Experienced in modern ES6+, DOM operations, asynchronous workflows, and full-stack React applications.', since: '2022' },
+        { name: 'Golang', level: 'Proficient', projects: ['Backend Systems'], details: 'Concurrent backend server routines, microservices development, and high-performance system execution.', since: '2025' },
+        { name: 'TypeScript', level: 'Proficient', projects: ['Truck Hai', 'IAD System', 'ResumeRoast'], details: 'Enforces strict static typing, interfaces, and compile-time validation across production codebases.', since: '2023' },
+        { name: 'SQL', level: 'Proficient', projects: ['IAD System', 'Supabase'], details: 'Writing optimized relational database queries, table schema designs, indexing, and joins.', since: '2023' },
+        { name: 'C', level: 'Proficient', projects: ['Academic Tasks'], details: 'Academic background in low-level memory management, pointer arithmetic, and algorithmic complexity.', since: '2022' },
       ]
     },
     {
@@ -36,9 +37,9 @@ const Skills = () => {
       title: 'Frontend',
       icon: Layout,
       skills: [
-        { name: 'React.js', level: 'Core Stack', projects: ['ResumeRoast', 'EduCareer'], details: 'Primary frontend library. Fluent in custom hooks, functional lifecycle, local/global state management, and Vite integration.', since: '2023' },
-        { name: 'React Native', level: 'Proficient', projects: ['Mobile Prototypes'], details: 'Building mobile application interfaces utilizing cross-platform components and layout structures.', since: '2024' },
-        { name: 'Tailwind CSS', level: 'Expert', projects: ['All Projects'], details: 'Core styling pipeline. Designing custom variables configs, fluid layouts, and responsive flex/grid properties.', since: '2023' },
+        { name: 'React.js', level: 'Core Stack', projects: ['Truck Hai', 'IAD System', 'ResumeRoast'], details: 'Primary frontend library. Fluent in custom hooks, functional lifecycle, state management, and Vite builds.', since: '2023' },
+        { name: 'React Native', level: 'Proficient', projects: ['Truck Hai Mobile (Expo)'], details: 'Building production mobile features with React Native and Expo from Figma specs.', since: '2024' },
+        { name: 'Tailwind CSS', level: 'Expert', projects: ['Truck Hai', 'Portfolio'], details: 'Designing utility-first fluid layouts, dark themes, glassmorphic UI elements, and custom CSS variables.', since: '2023' },
       ]
     },
     {
@@ -46,11 +47,11 @@ const Skills = () => {
       title: 'Backend & DB',
       icon: Database,
       skills: [
-        { name: 'Node.js', level: 'Proficient', projects: ['ResumeRoast'], details: 'Server-side runtime environment for writing fast, asynchronous APIs and utility automation.', since: '2023' },
-        { name: 'Express.js', level: 'Proficient', projects: ['ResumeRoast'], details: 'Backend routing framework for architecting REST APIs, request validation middleware, and handlers.', since: '2023' },
-        { name: 'REST APIs', level: 'Proficient', projects: ['ResumeRoast', 'EduCareer'], details: 'Constructing standardized API architectures with correct status codes, headers, and payload structures.', since: '2023' },
-        { name: 'MongoDB', level: 'Familiar', projects: ['Web Apps'], details: 'NoSQL document database used for storage, queries, and quick prototyping of unstructured data schemas.', since: '2023' },
-        { name: 'Supabase', level: 'Proficient', projects: ['ResumeRoast'], details: 'Used for PostgreSQL storage hosting, authentication routines, and secure client-side database connections.', since: '2024' },
+        { name: 'PostgreSQL', level: 'Proficient', projects: ['IAD Hospital System'], details: 'Relational database schema design, audit logging, role-based data access control, and persistence.', since: '2024' },
+        { name: 'Node.js & Express', level: 'Proficient', projects: ['IAD System', 'ResumeRoast'], details: 'Building production REST APIs, JWT authentication middleware, and assembly/BFF server layers.', since: '2023' },
+        { name: 'REST APIs & BFF', level: 'Proficient', projects: ['Truck Hai', 'IAD System'], details: 'Constructing standardized API architectures with correct HTTP status codes, headers, and payload structures.', since: '2023' },
+        { name: 'Supabase', level: 'Proficient', projects: ['ResumeRoast'], details: 'Leveraging cloud PostgreSQL, auth routines, row-level security, and serverless database storage.', since: '2024' },
+        { name: 'MongoDB', level: 'Familiar', projects: ['Web Apps'], details: 'NoSQL document database used for flexible document storage and quick prototyping.', since: '2023' },
       ]
     },
     {
@@ -58,11 +59,11 @@ const Skills = () => {
       title: 'AI, ML & Analytics',
       icon: Brain,
       skills: [
-        { name: 'Scikit-Learn', level: 'Proficient', projects: ['EduCareer', 'Data Models'], details: 'Used for training classification algorithms, data standardization pipelines, and cluster analysis.', since: '2024' },
-        { name: 'TensorFlow', level: 'Familiar', projects: ['Deep Learning'], details: 'Familiar with constructing basic artificial neural networks, deep layers, and model assessment.', since: '2024' },
-        { name: 'LLMs', level: 'Proficient', projects: ['ResumeRoast'], details: 'Integrating advanced language models for text structure extraction, scoring systems, and prompt tuning.', since: '2025' },
-        { name: 'Power BI', level: 'Proficient', projects: ['Business Analytics'], details: 'Designing business intelligence reports, data relationship schemas, and interactive dashboards.', since: '2024' },
-        { name: 'NumPy & Pandas', level: 'Proficient', projects: ['EduCareer', 'Data Analysis'], details: 'Handling large data matrices, tabular computations, dataset cleaning, and algebraic calculations.', since: '2023' },
+        { name: 'LLMs', level: 'Proficient', projects: ['ResumeRoast'], details: 'Integrating large language models for automated resume parsing, ATS scoring, and structured feedback.', since: '2025' },
+        { name: 'TensorFlow & U-Net', level: 'Proficient', projects: ['Wildfire Digital Twin'], details: 'Constructing deep learning semantic segmentation models for remote sensing imagery and spread modeling.', since: '2024' },
+        { name: 'Scikit-Learn', level: 'Proficient', projects: ['EduCareer'], details: 'Training classification models, feature engineering pipelines, and semantic career recommendation vectors.', since: '2024' },
+        { name: 'Power BI & Tableau', level: 'Proficient', projects: ['Business Analytics'], details: 'Designing business intelligence dashboards, DAX measures, and data relationship visualization schemas.', since: '2024' },
+        { name: 'NumPy & Pandas', level: 'Proficient', projects: ['EduCareer', 'Data Analysis'], details: 'Tabular computation, matrix algebra, data cleaning, and statistical processing.', since: '2023' },
       ]
     },
     {
@@ -70,10 +71,9 @@ const Skills = () => {
       title: 'Developer Tools',
       icon: Terminal,
       skills: [
-        { name: 'Git & GitHub', level: 'Expert', projects: ['All Projects'], details: 'Daily version control tracking, merge resolution, branching models, and deployment workflows.', since: '2022' },
-        { name: 'Postman & Bruno', level: 'Proficient', projects: ['ResumeRoast', 'EduCareer'], details: 'API debugging, manual validation of HTTP endpoints, query params, and JSON schema outputs.', since: '2023' },
-        { name: 'VS Code', level: 'Expert', projects: ['All Projects'], details: 'Main text editor customized with developer packages, static linters, and keyboard shortcuts.', since: '2021' },
-        { name: 'Docker', level: 'Familiar', projects: ['Container Environment'], details: 'Containerizing project runtimes to prevent local configuration conflicts and ease deployment.', since: '2024' },
+        { name: 'Git & GitHub', level: 'Expert', projects: ['Truck Hai', 'All Repos'], details: 'Feature branching models, PR creation, code reviews, conflict resolution, and release workflows.', since: '2022' },
+        { name: 'Postman & Bruno', level: 'Proficient', projects: ['Truck Hai', 'IAD System'], details: 'API endpoint validation, authentication headers verification, environment variables, and payload tests.', since: '2023' },
+        { name: 'Docker', level: 'Familiar', projects: ['Container Runtimes'], details: 'Containerizing applications to isolate development environments and streamline deployments.', since: '2024' },
       ]
     }
   ];
@@ -237,8 +237,9 @@ const Skills = () => {
           </h3>
           <div className="flex flex-wrap justify-center gap-2.5 max-w-2xl mx-auto">
             {[
-              'Keras', 'Tableau', 'FastAPI', 'Sentence-BERT',
-              'Graph-BERT', 'OCR', 'Python Flask', 'SQL Server'
+              'PostgreSQL', 'Golang', 'FastAPI', 'Sentence-BERT',
+              'Graph-BERT', 'OCR & NLP', 'U-Net', 'OpenCV',
+              'JWT Auth', 'RBAC & Audit Logging', 'Tableau', 'Docker'
             ].map((skill) => (
               <span
                 key={skill}

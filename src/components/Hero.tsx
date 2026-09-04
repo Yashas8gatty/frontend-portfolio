@@ -63,24 +63,25 @@ const Hero = () => {
       newLogs.push({
         type: 'output',
         text: `Yashas H Gatty | B.E. in Artificial Intelligence & Machine Learning (Canara Engineering College)
-Currently a Front-End Intern at Truck Hai Technologies Pvt. Ltd., building production-facing React systems.`
+Software Developer Intern at Truck Hai Technologies & former intern at Institute of Applied Dermatology (IAD). Published Patent holder in Adaptive Career Trajectory & Resume AI systems.`
       });
     } else if (trimmedCmd === 'skills') {
       newLogs.push({
         type: 'output',
         text: `CORE TECH STACK:
-  • Languages: Python, JavaScript, TypeScript, SQL, C
-  • Frontend: React.js, React Native, Tailwind CSS, JavaScript ES6
-  • Backend & DB: Node.js, Express.js, REST APIs, MongoDB, Supabase
-  • AI/ML & Tools: Scikit-Learn, TensorFlow, NumPy, Pandas, Git, Docker, Postman`
+  • Languages: Python, JavaScript, Golang, TypeScript, SQL, C
+  • Frontend & Mobile: React.js, React Native (Expo), Tailwind CSS, Vite
+  • Backend & DB: Node.js, Express.js, PostgreSQL, Supabase, MongoDB, REST APIs, BFF Layer
+  • AI/ML & Tools: LLMs, TensorFlow, U-Net, Scikit-Learn, Power BI, Git, Docker, Postman, Bruno`
       });
     } else if (trimmedCmd === 'projects') {
       newLogs.push({
         type: 'output',
-        text: `PROJECT DIRECTORY:
-  1. EduCareer: AI career platform using Sentence-BERT, Graph-BERT, FastAPI, React, OCR.
-  2. ResumeRoast: Interactive resume analysis platform using LLMs, Node.js, Express, Supabase, React.
-  3. Campaign AI: Marketing campaign management platform using React, Vite, Tailwind, JWT.
+        text: `FEATURED PROJECTS & PUBLICATIONS:
+  1. ResumeRoast: Full-stack AI resume analysis platform (LLMs, React, Supabase).
+  2. EduCareer: AI career guidance system (Sentence-BERT, Graph-BERT, FastAPI).
+  3. Wildfire Digital Twin: Remote sensing spread simulation (U-Net, TensorFlow, OpenCV).
+  4. Published Patent: Unified Career Trajectory Analysis & Automated Resume Management.
 Type 'github' to view code repositories.`
       });
     } else if (trimmedCmd === 'contact') {
@@ -96,15 +97,14 @@ Type 'github' to view code repositories.`
         type: 'output',
         text: `yashas@portfolio-v2
 -------------------
-OS: Canara Engineering College (B.E. AI & ML)
-Host: Yashas H Gatty (Front-End Intern @ Truck Hai)
-Kernel: React 18 / Vite / TS
+OS: Canara Engineering College (B.E. AI & ML 2023–2027)
+Host: Yashas H Gatty (Software Developer Intern @ Truck Hai)
+Kernel: React / TypeScript / Vite / Node / Python / Golang
 Uptime: 4th Year Student
+Publications: 1 Published Patent
 Shell: React-Terminal-Shell
 IDE: Visual Studio Code
-Frame Rate: 60fps (Hardware Accel)
-Primary Engine: React, TS, Tailwind CSS, Python
-Memory: Active and learning new systems`
+Primary Engine: React, React Native (Expo), TypeScript, PostgreSQL, Python`
       });
     } else if (trimmedCmd === 'github') {
       newLogs.push({
@@ -192,7 +192,7 @@ Memory: Active and learning new systems`
 
             {/* Paragraph Bio */}
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed animate-fade-in font-sans">
-              B.E. student in Artificial Intelligence & Machine Learning at Canara Engineering College and Front-End Intern at Truck Hai Technologies, focused on full-stack React systems and AI products.
+              Software Developer Intern & B.E. student in Artificial Intelligence & Machine Learning at Canara Engineering College, engineering full-stack web/mobile applications, AI products, and PostgreSQL systems.
             </p>
 
             {/* CTAs & Socials */}

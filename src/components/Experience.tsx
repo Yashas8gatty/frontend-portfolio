@@ -4,8 +4,11 @@ import { Card } from '@/components/ui/card';
 interface WorkExperience {
   title: string;
   company: string;
+  location?: string;
   date: string;
+  status: 'ACTIVE' | 'COMPLETED';
   description: string;
+  bullets?: string[];
   skills: string[];
   id: string;
 }
@@ -22,11 +25,33 @@ const Experience = () => {
   const experiences: WorkExperience[] = [
     {
       id: 'exp_truckhai',
-      title: 'Front-End Intern',
+      title: 'Software Developer Intern',
       company: 'Truck Hai Technologies Pvt. Ltd.',
+      location: 'Remote',
       date: 'Feb 2026 – Present',
-      description: 'Developing and optimizing production-facing frontend web applications. Creating responsive user interfaces using React.js and TypeScript, integrating RESTful API endpoints, configuring Vite build setups, and collaborating with cross-functional teams using Git workflows.',
-      skills: ['React.js', 'TypeScript', 'Tailwind CSS', 'Vite', 'REST APIs', 'Git Collaboration']
+      status: 'ACTIVE',
+      description: 'Developing production-ready web and mobile features using React, React Native (Expo), TypeScript, Tailwind CSS, and Vite from Figma designs, contributing to BFF/Assembly layers and managing collaborative Git workflows.',
+      bullets: [
+        'Developed production-ready web and mobile features using React, React Native (Expo), TypeScript, Tailwind CSS, and Vite from Figma designs.',
+        'Integrated REST APIs and contributed to the BFF/Assembly layer, debugging authentication, API, mobile, and backend issues.',
+        'Managed Git/GitHub workflows, feature branches, pull requests, and code reviews while collaborating with frontend and backend teams.'
+      ],
+      skills: ['React.js', 'React Native (Expo)', 'TypeScript', 'Tailwind CSS', 'Vite', 'BFF / Assembly Layer', 'REST APIs', 'Git Workflows']
+    },
+    {
+      id: 'exp_iad',
+      title: 'Software Developer Intern',
+      company: 'Institute of Applied Dermatology (IAD)',
+      location: 'Kasaragod, Kerala',
+      date: 'Aug 2026 – Sept 2026',
+      status: 'COMPLETED',
+      description: 'Engineered a Hospital Costing and Billing Management System using React, TypeScript, Node.js, Express, and PostgreSQL for patient management, treatment costing, billing, and reporting.',
+      bullets: [
+        'Developed a Hospital Costing and Billing Management System using React, TypeScript, Node.js, Express, and PostgreSQL for patient management, treatment costing, billing, and reports.',
+        'Built RESTful APIs with JWT-based authentication and role-based access control, integrating frontend workflows with PostgreSQL for secure data persistence, validation, and audit logging.',
+        'Designed the system for deployment at IAD branches across India.'
+      ],
+      skills: ['React.js', 'TypeScript', 'Node.js', 'Express.js', 'PostgreSQL', 'JWT Auth', 'RBAC', 'Audit Logging']
     }
   ];
 
@@ -66,14 +91,18 @@ const Experience = () => {
                     </h3>
                   </div>
 
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-mono text-xs border border-primary/20 shrink-0 self-start sm:self-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                    <span>ONGOING</span>
+                  <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-xs border shrink-0 self-start sm:self-center ${
+                    exp.status === 'ACTIVE' 
+                      ? 'bg-primary/10 text-primary border-primary/20' 
+                      : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${exp.status === 'ACTIVE' ? 'bg-accent animate-pulse' : 'bg-emerald-400'}`} />
+                    <span>{exp.status === 'ACTIVE' ? 'ONGOING' : 'COMPLETED'}</span>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-mono text-muted-foreground mb-4">
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1 text-foreground font-medium">
                     <Briefcase className="w-3.5 h-3.5 text-primary" />
                     {exp.company}
                   </span>
@@ -81,11 +110,28 @@ const Experience = () => {
                     <Calendar className="w-3.5 h-3.5" />
                     {exp.date}
                   </span>
+                  {exp.location && (
+                    <span className="flex items-center gap-1 text-accent/80">
+                      <Compass className="w-3.5 h-3.5" />
+                      {exp.location}
+                    </span>
+                  )}
                 </div>
 
-                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
-                  {exp.description}
-                </p>
+                {exp.bullets && exp.bullets.length > 0 ? (
+                  <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
+                    {exp.bullets.map((bullet, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-primary font-mono mt-0.5">•</span>
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-6 font-sans">
+                    {exp.description}
+                  </p>
+                )}
 
                 {/* Skills tags */}
                 <div className="space-y-3">
@@ -94,7 +140,7 @@ const Experience = () => {
                     {exp.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-2.5 py-1 rounded-md border border-white/5 bg-secondary/30 font-mono text-[10px] text-slate-300"
+                        className="px-2.5 py-1 rounded-md border border-white/5 bg-secondary/30 font-mono text-[10px] text-slate-300 hover:border-accent/30 hover:text-accent transition-colors"
                       >
                         {skill}
                       </span>
